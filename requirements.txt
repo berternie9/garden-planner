@@ -1,0 +1,18 @@
+os
+csv
+calendar
+datetime
+pytz
+requests
+urllib
+
+cs50
+flask
+flask_session
+werkzeug.security
+functools
+
+openmeteo_requests
+requests_cache
+pandas as pd
+retry_requests

@@ -1,0 +1,202 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Admin
+{% endblock %}
+
+{% block main %}
+    <h1>Add Plant</h1>
+    <form action="/admin" method="post">
+        <label class="input_label">Plant name (lowercase):
+            <input autocomplete="off" name="plant_name_add" placeholder="Plant name (lowercase)" type="text" pattern="[a-z\s]{1,}" required>
+        </label>
+        <label class="input_label">Duration to maturity (months):
+            <input autocomplete="off" name="duration_to_maturity_months_add" placeholder="Duration to maturity (months)" type="number" step="any" min="0" required>
+        </label>
+        <label class="input_label">Spacing (metres):
+            <input autocomplete="off" name="plant_spacing_metres_add" placeholder="Spacing (metres)" type="number" step="any" min="0" required>
+        </label>
+        <label class="input_label">Required space per plant (m<sup>2</sup>):
+            <input autocomplete="off" name="metres_squared_required_add" placeholder="Required space per plant (metres squared)" type="number" step="any" min="0" required>
+        </label>
+        <br>
+        <fieldset>
+            <legend>Perennial or annual:</legend>
+            <div>
+                <input name="perennial_or_annual_add" type="radio" value="perennial"><label>Perennial</label>
+            </div>
+            <div>
+                <input name="perennial_or_annual_add" type="radio" value="annual"><label>Annual</label>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Months to plant (from seed): </legend>
+            <div class="checkbox">
+                <input type="checkbox" name="january_add" value="yes"><label>January</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="february_add" value="yes"><label>February</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="march_add" value="yes"><label>March</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="april_add" value="yes"><label>April</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="may_add" value="yes"><label>May</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="june_add" value="yes"><label>June</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="july_add" value="yes"><label>July</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="august_add" value="yes"><label>August</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="september_add" value="yes"><label>September</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="october_add" value="yes"><label>October</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="november_add" value="yes"><label>November</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="december_add" value="yes"><label>December</label>
+            </div>
+        </fieldset>
+        <button type="submit" name="add_plant_button" value="yes">Add Plant</button>
+    </form>
+    <br>
+
+    <h1>Remove Plant</h1>
+    <form action="/admin" method="post">
+        <label class="input_label">Plant name (lowercase):
+            <input autocomplete="off" name="plant_name_remove" placeholder="Plant name (lowercase)" type="text" pattern="[a-z\s]{1,}" required>
+        </label>
+        <button type="submit" name="remove_plant_button" value="yes">Remove Plant</button>
+    </form>
+    <br>
+
+    <h1>Update Plant</h1>
+    <form action="/admin" method="post">
+        <label class="input_label">Plant name (lowercase):
+            <input autocomplete="off" name="plant_name_update" placeholder="Plant name (lowercase)" type="text" pattern="[a-z\s]{1,}" required>
+        </label>
+        <label class="input_label">New plant name (if required; lowercase):
+            <input autocomplete="off" name="new_plant_name_update" placeholder="New plant name (if required; lowercase)" type="text" pattern="[a-z\s]{1,}">
+        </label>
+        <label class="input_label">Duration to maturity (months)
+            <input autocomplete="off" name="duration_to_maturity_months_update" placeholder="Duration to maturity (months)" type="number" step="any" min="0" required>
+        </label>
+        <label class="input_label">Spacing (metres)
+            <input autocomplete="off" name="plant_spacing_metres_update" placeholder="Spacing (metres)" type="number" step="any" min="0" required>
+        </label>
+        <label class="input_label">Required space per plant (m<sup>2</sup>):
+            <input autocomplete="off" name="metres_squared_required_update" placeholder="Required space per plant (metres squared)" type="number" step="any" min="0" required>
+        </label>
+        <br>
+        <fieldset>
+            <legend>Perennial or annual:</legend>
+            <div>
+                <input name="perennial_or_annual_update" type="radio" value="perennial"><label>Perennial</label>
+            </div>
+            <div>
+                <input name="perennial_or_annual_update" type="radio" value="annual"><label>Annual</label>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Months to plant (from seed): </legend>
+            <div class="checkbox">
+                <input type="checkbox" name="january_update" value="yes"><label>January</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="february_update" value="yes"><label>February</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="march_update" value="yes"><label>March</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="april_update" value="yes"><label>April</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="may_update" value="yes"><label>May</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="june_update" value="yes"><label>June</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="july_update" value="yes"><label>July</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="august_update" value="yes"><label>August</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="september_update" value="yes"><label>September</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="october_update" value="yes"><label>October</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="november_update" value="yes"><label>November</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" name="december_update" value="yes"><label>December</label>
+            </div>
+        </fieldset>
+        <button type="submit" name="update_plant_button" value="yes">Update Plant</button>
+    </form>
+    <br>
+
+    <h1>Add Companion Friends</h1>
+    <form action="/admin" method="post">
+        <label class="input_label">Plant A name (lowercase):
+            <input autocomplete="off" name="plant_name_add_friend_a" placeholder="Plant A name (lowercase)" type="text" pattern="[a-z\s]{1,}" required>
+        </label>
+        <label class="input_label">Plant B name (lowercase):
+            <input autocomplete="off" name="plant_name_add_friend_b" placeholder="Plant B name (lowercase)" type="text" pattern="[a-z\s]{1,}" required>
+        </label>
+        <button type="submit" name="add_companion_friends_button" value="yes">Add Companion Friends</button>
+    </form>
+    <br>
+
+    <h1>Remove Companion Friends</h1>
+    <form action="/admin" method="post">
+        <label class="input_label">Plant A name (lowercase):
+            <input autocomplete="off" name="plant_name_remove_friend_a" placeholder="Plant A name (lowercase)" type="text" pattern="[a-z]{1,\s}" required>
+        </label>
+            <label class="input_label">Plant B name (lowercase):
+        <input autocomplete="off" name="plant_name_remove_friend_b" placeholder="Plant B name (lowercase)" type="text" pattern="[a-z]{1,\s}" required>
+     </label>
+        <button type="submit" name="remove_companion_friends_button" value="yes">Remove Companion Friends</button>
+    </form>
+    <br>
+
+    <h1>Add Companion Enemies</h1>
+    <form action="/admin" method="post">
+        <label class="input_label">Plant A name (lowercase):
+            <input autocomplete="off" name="plant_name_add_enemy_a" placeholder="Plant A name (lowercase)" type="text" pattern="[a-z]\s]" required>
+        </label>
+        <label class="input_label">Plant B name (lowercase):
+            <input autocomplete="off" name="plant_name_add_enemy_b" placeholder="Plant B name (lowercase)" type="text" pattern="[a-z]{1,\s}" required>
+        </label>
+        <button type="submit" name="add_companion_enemies_button" value="yes">Add Companion Enemies</button>
+    </form>
+    <br>
+
+    <h1>Remove Companion Enemies</h1>
+    <form action="/admin" method="post">
+        <label class="input_label">Plant A name (lowercase):
+            <input autocomplete="off" name="plant_name_remove_enemy_a" placeholder="Plant A name (lowercase)" type="text" pattern="[a-z]{1,\s}" required>
+        </label>
+        <label class="input_label">Plant B name (lowercase):
+            <input autocomplete="off" name="plant_name_remove_enemy_b" placeholder="Plant B name (lowercase)" type="text" pattern="[a-z]{1,\s}" required>
+        </label>
+        <button type="submit" name="remove_companion_enemies_button" value="yes">Remove Companion Enemies</button>
+    </form>
+    <br>
+
+{% endblock %}

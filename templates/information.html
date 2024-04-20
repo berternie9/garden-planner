@@ -1,0 +1,215 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Information
+{% endblock %}
+
+{% block main %}
+    {% if plants %}
+    <h1>Search All Plants</h1>
+    <input id="searchbar_all_plants_table" autocomplete="off" placeholder="Plant name" type="text" pattern="[a-z\s]{1,}">
+        <table class="table">
+            <thead>
+                <tr class="search_all_plants_header_footer_tr">
+                    <th rowspan="2">Plant name</th>
+                    <th rowspan="2">Duration to maturity* (months)</th>
+                    <th rowspan="2">Spacing (m)</th>
+                    <th rowspan="2">Required space per plant (m<sup>2</sup>)</th>
+                    <th rowspan="2">Perennial or annual</th>
+                    <th rowspan="1" colspan="12">Months to plant**</th>
+                </tr>
+                <tr class="search_all_plants_header_footer_tr">
+                    <th>January</th>
+                    <th>February</th>
+                    <th>March</th>
+                    <th>April</th>
+                    <th>May</th>
+                    <th>June</th>
+                    <th>July</th>
+                    <th>August</th>
+                    <th>September</th>
+                    <th>October</th>
+                    <th>November</th>
+                    <th>December</th>
+                </tr>
+            </thead>
+            <tbody id="search_all_plants_table_body">
+                {% for i in range(plants|length) %}
+                    <tr class="search_all_plants_body_tr">
+                        <td>{{ plants[i]["plant_name"] | capitalize }}</td>
+                        <td>{{ plants[i]["duration_to_maturity_months"] }}</td>
+                        <td>{{ plants[i]["plant_spacing_metres"] }}</td>
+                        <td>{{ plants[i]["metres_squared_required"] }}</td>
+                        <td>{{ plants[i]["perennial_or_annual"] | capitalize }}</td>
+                        <td>{{ plants[i]["january"] | capitalize }}</td>
+                        <td>{{ plants[i]["february"] | capitalize }}</td>
+                        <td>{{ plants[i]["march"] | capitalize }}</td>
+                        <td>{{ plants[i]["april"] | capitalize }}</td>
+                        <td>{{ plants[i]["may"] | capitalize }}</td>
+                        <td>{{ plants[i]["june"] | capitalize }}</td>
+                        <td>{{ plants[i]["july"] | capitalize }}</td>
+                        <td>{{ plants[i]["august"] | capitalize }}</td>
+                        <td>{{ plants[i]["september"] | capitalize }}</td>
+                        <td>{{ plants[i]["october"] | capitalize }}</td>
+                        <td>{{ plants[i]["november"] | capitalize }}</td>
+                        <td>{{ plants[i]["december"] | capitalize }}</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="search_all_plants_header_footer_tr">
+                    <td colspan="17">*from seed, unless otherwise specified &nbsp **from seed; if seedling, plant 2 months later</td>
+                </tr>
+            </tfoot>
+        </table>
+
+
+
+        <h1>All Plants <span><button type="button" id="hide_show_all_plants">&#9660</button></span></h1>
+            <table id="all_plants_table">
+                <thead>
+                    <tr>
+                        <th rowspan="2">Plant name</th>
+                        <th rowspan="2">Duration to maturity* (months)</th>
+                        <th rowspan="2">Spacing (m)</th>
+                        <th rowspan="2">Required space per plant (m<sup>2</sup>)</th>
+                        <th rowspan="2">Perennial or annual</th>
+                        <th rowspan="1" colspan="12">Months to plant**</th>
+                    </tr>
+                    <tr>
+                        <th>January</th>
+                        <th>February</th>
+                        <th>March</th>
+                        <th>April</th>
+                        <th>May</th>
+                        <th>June</th>
+                        <th>July</th>
+                        <th>August</th>
+                        <th>September</th>
+                        <th>October</th>
+                        <th>November</th>
+                        <th>December</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(plants|length) %}
+                        <tr class="all_plants_tbody_tr">
+                            <td>{{ plants[i]["plant_name"] | capitalize }}</td>
+                            <td>{{ plants[i]["duration_to_maturity_months"] }}</td>
+                            <td>{{ plants[i]["plant_spacing_metres"] }}</td>
+                            <td>{{ plants[i]["metres_squared_required"] }}</td>
+                            <td>{{ plants[i]["perennial_or_annual"] | capitalize }}</td>
+                            <td>{{ plants[i]["january"] | capitalize }}</td>
+                            <td>{{ plants[i]["february"] | capitalize }}</td>
+                            <td>{{ plants[i]["march"] | capitalize }}</td>
+                            <td>{{ plants[i]["april"] | capitalize }}</td>
+                            <td>{{ plants[i]["may"] | capitalize }}</td>
+                            <td>{{ plants[i]["june"] | capitalize }}</td>
+                            <td>{{ plants[i]["july"] | capitalize }}</td>
+                            <td>{{ plants[i]["august"] | capitalize }}</td>
+                            <td>{{ plants[i]["september"] | capitalize }}</td>
+                            <td>{{ plants[i]["october"] | capitalize }}</td>
+                            <td>{{ plants[i]["november"] | capitalize }}</td>
+                            <td>{{ plants[i]["december"] | capitalize }}</td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="table_footnotes" colspan="17">*from seed, unless otherwise specified &nbsp **from seed; if seedling, plant 2 months later</td>
+                    </tr>
+                </tfoot>
+            </table>
+    {% endif %}
+
+    {% if freetext_plants_from_user %}
+        <h1>Freetext plants (user)<span><button type="button" id="hide_show_freetext_plants_user">&#9660</button></span></h1>
+        <table id="freetext_plants_user_table">
+            <thead>
+                <tr>
+                    <th>Plant name</th>
+                    <th>Duration to maturity (months)</th>
+                    <th>Spacing (metres)</th>
+                    <th>Required space per plant (metres squared)</th>
+                    <th>Perennial or annual</th>
+                    <th>January</th>
+                    <th>February</th>
+                    <th>March</th>
+                    <th>April</th>
+                    <th>May</th>
+                    <th>June</th>
+                    <th>July</th>
+                    <th>August</th>
+                    <th>September</th>
+                    <th>October</th>
+                    <th>November</th>
+                    <th>December</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(freetext_plants_from_user | length) %}
+                    <tr class="freetext_plants_body_tr">
+                        <td>{{ freetext_plants_from_user[i]["plant_name"] | capitalize }}</td>
+                        <td>{{ freetext_plants_from_user[i]["duration_to_maturity_months"] }}</td>
+                        <td>{{ freetext_plants_from_user[i]["plant_spacing_metres"] }}</td>
+                        <td>{{ freetext_plants_from_user[i]["metres_squared_required"] }}</td>
+                        <td>{{ freetext_plants_from_user[i]["perennial_or_annual"] | capitalize }}</td>
+                        <td>{{ freetext_plants_from_user[i]["january"] | capitalize }}</td>
+                        <td>{{ freetext_plants_from_user[i]["february"] | capitalize }}</td>
+                        <td>{{ freetext_plants_from_user[i]["march"] | capitalize }}</td>
+                        <td>{{ freetext_plants_from_user[i]["april"] | capitalize }}</td>
+                        <td>{{ freetext_plants_from_user[i]["may"] | capitalize }}</td>
+                        <td>{{ freetext_plants_from_user[i]["june"] | capitalize }}</td>
+                        <td>{{ freetext_plants_from_user[i]["july"] | capitalize }}</td>
+                        <td>{{ freetext_plants_from_user[i]["august"] | capitalize }}</td>
+                        <td>{{ freetext_plants_from_user[i]["september"] | capitalize }}</td>
+                        <td>{{ freetext_plants_from_user[i]["october"] | capitalize }}</td>
+                        <td>{{ freetext_plants_from_user[i]["november"] | capitalize }}</td>
+                        <td>{{ freetext_plants_from_user[i]["december"] | capitalize }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    {% if companion_friends %}
+        <h1>Companion friends<span><button type="button" id="hide_show_companion_friends">&#9660</button></span></h1>
+        <table id="companion_friends">
+            <thead>
+                <tr>
+                    <th>This plant is friends with...</th>
+                    <th>this plant!</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(companion_friends|length) %}
+                    <tr class="companion_friends_body_tr">
+                        <td>{{ companion_friends[i]["companion_friends_plant_a"] | capitalize }}</td>
+                        <td>{{ companion_friends[i]["companion_friends_plant_b"] | capitalize }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    {% if companion_enemies %}
+        <h1>Companion enemies<span><button type="button" id="hide_show_companion_enemies">&#9660</button></span></h1>
+        <table id="companion_ememies">
+            <thead>
+                <tr>
+                    <th>This plant is enemies with...</th>
+                    <th>this plant!</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(companion_enemies|length) %}
+                    <tr class="companion_enemies_body_tr">
+                        <td>{{ companion_enemies[i]["companion_enemies_plant_a"] | capitalize }}</td>
+                        <td>{{ companion_enemies[i]["companion_enemies_plant_b"] | capitalize }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,258 @@
+h1, h2, h3, h4, h5, h6
+{
+    font-family: "Londrina Solid", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    color: #386694;
+    margin: 5px;
+}
+
+h1
+{
+    font-size: 250%;
+}
+
+h2
+{
+    font-size: 200%;
+}
+
+h3
+{
+    font-size: 150%;
+}
+
+h4
+{
+    font-size: 120%
+}
+
+h5
+{
+    font-size: 110%
+}
+
+h6
+{
+    font-size: 100%;
+}
+
+button[type="submit"], button[type="search"], button[type="button"]
+{
+
+    box-sizing: border-box;
+    border: 2px solid #ffffff;
+    border-radius: 4px;
+    color: #ffffff;
+    background-color: #386694;
+}
+
+button[type="submit"], button[type="search"]
+{
+    padding: 5px 8px;
+    margin: 8px 0;
+    display: block;
+    font: bolder 12px Arial, sans-serif;
+}
+
+button[type="button"]
+{
+    padding: 2px 2px;
+    margin: 0 0 8px 0;
+    display: inline;
+    font: bolder 8px Arial, sans-serif;
+    position: relative;
+    bottom: 4px;
+}
+
+button[type="submit"]:hover, button[type="search"]:hover, button[type="button"]:hover
+{
+    box-shadow: 0 8px 5px 0 rgba(0,0,0,0.15), 0 10px 8px 0 rgba(0,0,0,0.1);
+}
+
+
+input[type="text"], input[type="number"], input[type="password"]
+{
+    width: 200px;
+    padding: 5px 8px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #386694;
+    border-radius: 4px;
+    display: inline;
+}
+
+th, td, tr
+{
+    border: 1px solid #ffffff;
+    padding: 5px;
+    font-size: 90%;
+}
+
+table
+{
+    border-collapse: collapse;
+    background-color: rgba(255,255,255,.5)
+}
+
+form
+{
+    padding: 0 0 0 1%;
+    font-size: 90%;
+}
+
+a
+{
+    color: #38947d;
+    text-decoration: none;
+}
+
+a:hover
+{
+    text-decoration: underline;
+}
+
+.table_footnotes
+{
+    padding: 5px 0 0 50px;
+    font-style: italic;
+    border: none;
+}
+
+.body
+{
+    font-family: Arial, sans-serif;
+    background-image: linear-gradient(rgba(255,255,255,.7), rgba(255,255,255,.7)), url("/static/watercolour_fern.png");
+    background-repeat: repeat;
+    background-color: #e6fff2;
+    background-size: 10%;
+    padding: 1%;
+}
+
+.error
+{
+    color: #38947d;
+    border: 1px solid #ffffff;
+    padding: 5px;
+    display: inline;
+    font-size: 150%;
+}
+
+.londrina-sketch
+{
+    font-family: "Londrina Sketch", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.londrina-solid
+{
+    font-family: "Londrina Solid", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.input_label
+{
+    display: block;
+}
+
+
+
+.title
+{
+    font-family: "Londrina Sketch", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+    font-size: 700%;
+    display: block;
+    color: #386694;
+    text-align: center;
+    margin: 5px;
+}
+
+.navbar_ul
+{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar_header
+{
+    line-height: 1;
+    block-size: 40px;
+}
+
+.navbar_link
+{
+    display: block;
+    padding: 8px;
+    background-color: rgba(107, 199, 176, 0.7);
+    color: #ffffff;
+    font-size: 80%;
+    font-weight: 600;
+}
+
+.navbar_li_left
+{
+    float: left;
+    border: 2px solid #ffffff;
+    border-width: 2px;
+    border-radius: 4px;
+    margin: 5px;
+}
+
+.navbar_li_right
+{
+    float: right;
+    border: 2px solid #ffffff;
+    border-radius: 4px;
+    margin: 5px;
+}
+
+.yearly_garden_table, .weather
+{
+    margin: 10px 10px 20px 10px;
+    border: 3px solid #ffffff;
+    border-radius: 10px;
+    font-family: "Londrina Solid", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 24px;
+}
+
+.yearly_garden_table td
+{
+    padding: 10px;
+    text-align: center;
+}
+
+.yearly_garden_table td:first-child
+{
+    border-right: 3px solid #ffffff;
+}
+
+.yearly_garden_table thead tr
+{
+    border-bottom: 3px solid #ffffff;
+}
+
+.yearly_garden_table tbody tr:nth-child(3n+2)
+{
+    border-bottom: 3px solid #ffffff;
+}
+
+.yearly_garden_table td:last-child
+{
+    width: 80px;
+}
+
+.garden_size
+{
+    font-size: 100%;
+    margin: 0 0 0 10px;
+    color: #386694;
+    font-weight: bold;
+}
+

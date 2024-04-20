@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+        <meta charset="utf-8"></meta>
+
+        <link href="/static/styles.css" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Londrina+Sketch&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@100;300;400;900&display=swap" rel="stylesheet">
+
+        <script src="/static/sort_table.js"></script>
+        <script src="/static/hide_show_all_plants.js"></script>
+        <script src="/static/search_all_plants.js"></script>
+        <script src="/static/hide_show_add_freetext_plant.js"></script>
+        <script src="/static/hide_show_remove_freetext_plant.js"></script>
+        <script src="/static/hide_show_add_new_garden.js"></script>
+        <script src="/static/hide_show_remove_garden.js"></script>
+        <script src="/static/hide_show_add_plants_to_garden.js"></script>
+        <script src="/static/hide_show_remove_plants_from_garden.js"></script>
+        <script src="/static/colour_months_row.js"></script>
+        <script src="/static/hide_show_freetext_plants_user.js"></script>
+        <script src="/static/hide_show_companion_friends.js"></script>
+        <script src="/static/hide_show_companion_enemies.js"></script>
+
+        <title> Garden Planner: {% block title %}{% endblock %} </title>
+    </head>
+
+    <body class="body">
+        <div class="navbar_header">
+            {% if session["user_id"] %}
+            <ul class="navbar_ul">
+                <li class="navbar_li_left"><a class="navbar_link" href="/">Home</a></li>
+                <li class="navbar_li_left"><a class="navbar_link" href="/information">All Plants</a></li>
+                <li class="navbar_li_left"><a class="navbar_link" href="/weather">Weather</a></li>
+            </ul>
+            <ul class="navbar_ul">
+                <li class="navbar_li_right"><a class="navbar_link" href="/change_password">Change Password</a></li>
+                <li class="navbar_li_right"><a class="navbar_link" href="/logout">Log Out</a></li>
+                {% if session["user_id"] == admin_id %}
+                    <li class="navbar_li_right"><a class="navbar_link" href="/admin">Admin</a></li>
+                {% endif %}
+            </ul>
+
+            {% else %}
+                <ul class="navbar_ul">
+                    <li class="navbar_li_left"><a class="navbar_link" href="/login">Log In</a></li>
+                    <li class="navbar_li_left"><a class="navbar_link" href="/register">Register</a></li>
+                </ul>
+            {% endif %}
+        </div>
+
+        <header>
+        </header>
+
+        <main>
+            <div class="title">Garden Planner</div>
+            {% block main %}{% endblock %}
+        </main>
+
+        <footer>
+
+        </footer>
+
+    </body>
+
+</html>

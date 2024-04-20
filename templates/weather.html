@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Weather
+{% endblock %}
+
+{% block main %}
+    <h1>Weather</h1>
+    {% if freetext_location == 'yes' and latitude != None and longitude != None %}
+        <h3>Location: Latitude: {{ latitude | round(4) }}, Longitude: {{ longitude | round(4) }}</h3>
+    {% else %}
+        <h3>Location: Fitzroy, VIC, AU (Latitude: -37.8045, Longitude: 144.979)</h3>
+    {% endif %}
+    <table class="weather">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Max temperature (&degC)</th>
+                <th>Min temperature (&degC)</th>
+                <th>Total rainfall (mm)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in range(daily_dataframe | length) %}
+                <tr class="weather_tr">
+                    <td>{{ daily_dataframe.loc[i][0].day }}/{{ daily_dataframe.loc[i][0].month }}/{{ daily_dataframe.loc[i][0].year }}</td>
+                    <td>{{ daily_dataframe.loc[i][1] | round|int }}</td>
+                    <td>{{ daily_dataframe.loc[i][2] | round|int }}</td>
+                    {% if daily_dataframe.loc[i][3] | round(1) > 0.0 %}
+                        <td>{{ (daily_dataframe.loc[i][3] | round(1)) }}</td>
+                    {% else %}
+                        <td>0</td>
+                    {% endif %}
+
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>Select your own location</h1>
+    <form action="/weather" method="post">
+        <label class="input_label">Latitude:
+            <input autocomplete="off" name="latitude" placeholder="Latitude" type="number" step="any" min="-90" max="90" required>
+        </label>
+        <label class="input_label">Longitude:
+            <input autocomplete="off" name="longitude" placeholder="Longitude" type="number" step="any" min="-180" max="180" required>
+        </label>
+        <button type="submit" name="add_location_button" value="yes">Update location</button>
+    </form>
+
+{% endblock %}
