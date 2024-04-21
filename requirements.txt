@@ -14,5 +14,5 @@ functools
 
 openmeteo_requests
 requests_cache
-pandas as pd
+pandas
 retry_requests
