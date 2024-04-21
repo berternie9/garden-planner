@@ -1,7 +1,7 @@
 pytz
 requests
 
-sqlite4
+psycopg2
 
 flask
 flask_session
