@@ -30,9 +30,9 @@ db = psycopg2.connect(host=os.environ['DB_HOST'],
                       user=os.environ['DB_USER'],       
                       password=os.environ['DB_PASSWORD'])
                      
-# if __name__ == "__main__":
-#     port = int(os.environ.get("PORT", 5000))
-#     app.run(host="0.0.0.0", port=port)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
    
 # @app.after_request
 # def after_request(response):
