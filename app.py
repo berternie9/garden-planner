@@ -33,32 +33,26 @@ db = psycopg2.connect(host=os.environ['DB_HOST'],
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-
-# cur = db.cursor()
-# cur.execute('SELECT * FROM books;')
-# books = cur.fetchall()
-# cur.close()
-# conn.close()
    
-@app.after_request
-def after_request(response):
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Expires"] = 0
-    response.headers["Pragma"] = "no-cache"
-    return response
+# @app.after_request
+# def after_request(response):
+#     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+#     response.headers["Expires"] = 0
+#     response.headers["Pragma"] = "no-cache"
+#     return response
 
-def error(message, code):
-    final_message = "Error " + str(code) + ": " +  message
-    return render_template("error.html", final_message=final_message, code=code)
+# def error(message, code):
+#     final_message = "Error " + str(code) + ": " +  message
+#     return render_template("error.html", final_message=final_message, code=code)
 
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if session.get("user_id") is None:
-            return redirect("/login")
-        return f(*args, **kwargs)
+# def login_required(f):
+#     @wraps(f)
+#     def decorated_function(*args, **kwargs):
+#         if session.get("user_id") is None:
+#             return redirect("/login")
+#         return f(*args, **kwargs)
 
-    return decorated_function
+#     return decorated_function
 
 @app.route("/", methods=["GET", "POST"])
 # @login_required
