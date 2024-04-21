@@ -24,17 +24,16 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-db = psycopg2.connect(host=os.environ['DB_HOST'],
+db = psycopg2.connect(host=os.environ['DB_HOST'], 
                       port=int(os.environ['DB_PORT'],
-                        database=os.environ['DB_NAME'],  
-                        user=os.environ['DB_USER'],       
-                        password=os.environ['DB_PASSWORD'])
+                      database=os.environ['DB_NAME'],
+                      user=os.environ['DB_USER'],       
+                      password=os.environ['DB_PASSWORD'])
+cur = db.cursor()
 
 if __name__ == '__main__':
     flask_port = int(os.getenv('PORT', 10000))  
     app.run(host='0.0.0.0', port=flask_port)         
-
-cur = db.cursor()
 
 # cur.execute('SELECT * FROM books;')
 # books = cur.fetchall()
@@ -65,7 +64,9 @@ def login_required(f):
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-    admin = db.execute("SELECT * FROM users WHERE username = 'admin'")
+    cur.execute("SELECT * FROM users WHERE username = 'admin'")
+    admin = cur.fetchall()
+  
     if len(admin) == 1:
         if session["user_id"] == admin[0]["user_id"]:
             admin_id = admin[0]["user_id"]
@@ -73,7 +74,7 @@ def index():
         admin_id = None
 
     if request.method == "POST":
-        """ Add freetext plants or gardens (including require plants) to SQL database, per user input from form in index.html """
+        # Add freetext plants or gardens (including require plants) to SQL database, per user input from form in index.html
         if request.form.get("add_freetext_plant_button"):
             if not request.form.get("plant_name_add"):
                 return error("Must provide plant name.", 400)
