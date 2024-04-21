@@ -498,7 +498,7 @@ def admin():
     if len(admin) == 1 and session["user_id"] == admin[0]["user_id"]:
         admin_id = admin[0]["user_id"]
         if request.method == "POST":
-            """ Insert new data from admin page into database"""
+            # Insert new data from admin page into database
 
             if request.form.get("add_plant_button"):
                 if not request.form.get("plant_name_add"):
