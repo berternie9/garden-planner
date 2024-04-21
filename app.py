@@ -61,17 +61,17 @@ def login_required(f):
     return decorated_function
 
 @app.route("/", methods=["GET", "POST"])
-@login_required
+# @login_required
 def index():
-    with db.cursor() as cur:
-      cur.execute("SELECT * FROM users WHERE username = %s", ('admin',))
-      admin = cur.fetchall()
+    # with db.cursor() as cur:
+    #   cur.execute("SELECT * FROM users WHERE username = %s", ('admin',))
+    #   admin = cur.fetchall()
     
-      if len(admin) == 1:
-          if session["user_id"] == admin[0]["user_id"]:
-              admin_id = admin[0]["user_id"]
-      else:
-          admin_id = None
+    #   if len(admin) == 1:
+    #       if session["user_id"] == admin[0]["user_id"]:
+    #           admin_id = admin[0]["user_id"]
+    #   else:
+    #       admin_id = None
 
     return render_template("index.html")
   
