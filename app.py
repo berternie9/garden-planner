@@ -57,6 +57,8 @@ if __name__ == "__main__":
 @app.route("/", methods=["GET", "POST"])
 # @login_required
 def index():
+  return "Test"
+  
     # with db.cursor() as cur:
     #   cur.execute("SELECT * FROM users WHERE username = %s", ('admin',))
     #   admin = cur.fetchall()
@@ -67,7 +69,7 @@ def index():
     #   else:
     #       admin_id = None
 
-      return "Test"
+      # return "Test"
     # return render_template("index.html")
   
 """
