@@ -28,7 +28,9 @@ db = psycopg2.connect(host=os.environ['DB_HOST'],
                       port=int(os.environ['DB_PORT']),
                       database=os.environ['DB_NAME'],
                       user=os.environ['DB_USER'],       
-                      password=os.environ['DB_PASSWORD'])
+                      password="***REMOVED***")
+                      
+                      # os.environ['DB_PASSWORD'])
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
