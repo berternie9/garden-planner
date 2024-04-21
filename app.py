@@ -75,7 +75,7 @@ def index():
 
     return render_template("index.html")
   
-  """
+"""
       if request.method == "POST":
           # Add freetext plants or gardens (including require plants) to SQL database, per user input from form in index.html
           if request.form.get("add_freetext_plant_button"):
