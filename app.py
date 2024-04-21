@@ -29,7 +29,10 @@ db = psycopg2.connect(host=os.environ['DB_HOST'],
                         database=os.environ['DB_NAME'],  
                         user=os.environ['DB_USER'],       
                         password=os.environ['DB_PASSWORD'])
-# PORT 5432
+
+if __name__ == '__main__':
+    flask_port = int(os.getenv('FLASK_PORT', 5000))  
+    app.run(host='0.0.0.0', port=flask_port)         
 
 cur = db.cursor()
 
@@ -38,8 +41,6 @@ cur = db.cursor()
 # cur.close()
 # conn.close()
    
-
-
 @app.after_request
 def after_request(response):
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
