@@ -1,6 +1,8 @@
 pytz
 requests
 
+sqlite4
+
 flask
 flask_session
 werkzeug
