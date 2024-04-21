@@ -164,7 +164,7 @@ def index():
               cur.execute("INSERT INTO freetext_plants (user_id, plant_name, duration_to_maturity_months, plant_spacing_metres, metres_squared_required, perennial_or_annual, january, february, march, april, may, june, july, august, september, october, november, december) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (int(session["user_id"]), request.form.get("plant_name_add"), duration_to_maturity_months_add, plant_spacing_metres_add, metres_squared_required_add, request.form.get("perennial_or_annual_add"), january_add, february_add, march_add, april_add, may_add, june_add, july_add, august_add, september_add, october_add, november_add, december_add,))          
               db.commit()
             
-            return redirect("/")
+              return redirect("/")
   
           if request.form.get("remove_freetext_plant_button"):
               if not request.form.get("plant_name_remove"):
