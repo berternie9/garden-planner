@@ -31,7 +31,7 @@ db = psycopg2.connect(host=os.environ['DB_HOST'],
                         password=os.environ['DB_PASSWORD'])
 
 if __name__ == '__main__':
-    flask_port = int(os.getenv('FLASK_PORT', 5000))  
+    flask_port = int(os.getenv('PORT', 10000))  
     app.run(host='0.0.0.0', port=flask_port)         
 
 cur = db.cursor()
