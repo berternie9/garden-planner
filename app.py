@@ -30,9 +30,9 @@ db = psycopg2.connect(host=os.environ['DB_HOST'],
                       user=os.environ['DB_USER'],       
                       password=os.environ['DB_PASSWORD'])
 
-if __name__ == '__main__':
-    flask_port = int(os.getenv('PORT', 10000))  
-    app.run(host='0.0.0.0', port=flask_port)         
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
 
 # cur = db.cursor()
 # cur.execute('SELECT * FROM books;')
