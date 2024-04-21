@@ -73,7 +73,8 @@ def index():
     #   else:
     #       admin_id = None
 
-    return render_template("index.html")
+      return "Test"
+    # return render_template("index.html")
   
 """
       if request.method == "POST":
