@@ -3,7 +3,7 @@ requests
 
 flask
 flask_session
-werkzeug.security
+werkzeug
 
 openmeteo_requests
 requests_cache
