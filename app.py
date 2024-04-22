@@ -465,7 +465,8 @@ def index():
                                 for l in range(j, 12):
                                     plants_growing_each_month_of_year[l].append(plants_planted_each_month_of_year[j][k])
                             elif plant_perennal_or_annual == "annual":
-                                for l in range(plant_months_to_remain_planted):
+                                months_to_actually_remain_planted = min(plant_months_to_remain_planted, 12 - j) 
+                                for l in range(months_to_actually_remain_planted):
                                     plants_growing_each_month_of_year[j + l].append(plants_planted_each_month_of_year[j][k])
     
                     for j in range(12):
