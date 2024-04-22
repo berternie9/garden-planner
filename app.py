@@ -290,8 +290,9 @@ def index():
     
                 if request.form.get("add_plants_to_garden_freetext") != "yes" and request.form.get("add_plants_to_garden_freetext") != "no":
                     return error("Is the plant freetext? Must select either yes or no.", 400)
-    
-    
+
+                print("TESTINGGGGGGGGGGGGGTESTINGGGGGGGGGGGGGTESTINGGGGGGGGGGGGGTESTINGGGGGGGGGGGGGTESTINGGGGGGGGGGGGGTESTINGGGGGGGGGGGGGTESTINGGGGGGGGGGGGGTESTINGGGGGGGGGGGGG")
+                
                 garden_id = None
                 cur.execute("SELECT garden_id FROM gardens WHERE user_id = %s AND garden_name = %s", (int(session["user_id"]), request.form.get("add_plants_to_garden_garden_name")))
                 garden_id = cur.fetchone()["garden_id"]
