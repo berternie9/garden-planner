@@ -874,9 +874,11 @@ def admin():
                         return error("Plant A name must be lowercase and alphabetical.", 400)
                     elif not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_add_enemy_b")) or not request.form.get("plant_name_add_enemy_b").islower():
                         return error("Plant B name must be lowercase and alphabetical.", 400)
-    --
-                    plant_names = db.execute("SELECT plant_name from plants")
-                    
+    
+                    cur.execute("SELECT plant_name from plants")
+                    plant_names = cur.fetchall()
+
+#                
                     freetext_plant_names_from_user = db.execute("SELECT plant_name FROM freetext_plants WHERE user_id = ?", int(session["user_id"]))
     
                     is_plant_a_in_db = False
