@@ -1143,7 +1143,9 @@ def register():
 @app.route("/weather", methods=["GET", "POST"])
 @login_required
 def weather():
-    admin = db.execute("SELECT * FROM users WHERE username = 'admin'")
+    with db.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+        cur.execute("SELECT * FROM users WHERE username = 'admin'")
+        admin = cur.fetchall()
     if len(admin) == 1 and session["user_id"] == admin[0]["user_id"]:
         admin_id = admin[0]["user_id"]
 
