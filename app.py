@@ -1143,12 +1143,6 @@ def register():
 @app.route("/weather", methods=["GET", "POST"])
 @login_required
 def weather():
-    with db.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
-        cur.execute("SELECT * FROM users WHERE username = 'admin'")
-        admin = cur.fetchall()
-    if len(admin) == 1 and session["user_id"] == admin[0]["user_id"]:
-        admin_id = admin[0]["user_id"]
-
     # Setup the Open-Meteo API client with cache and retry on error
     cache_session = requests_cache.CachedSession('.cache', expire_after = 3600)
     retry_session = retry(cache_session, retries = 5, backoff_factor = 0.2)
@@ -1234,5 +1228,5 @@ def weather():
 
     daily_dataframe = pd.DataFrame(data = daily_data)
 
-    return render_template("weather.html", latitude=latitude, longitude=longitude, freetext_location=freetext_location, daily_dataframe=daily_dataframe, admin_id=admin_id)
+    return render_template("weather.html", latitude=latitude, longitude=longitude, freetext_location=freetext_location, daily_dataframe=daily_dataframe)
 
