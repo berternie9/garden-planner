@@ -958,114 +958,124 @@ def admin():
             return error("You are not an admin.", 401)
 
 
-# @app.route("/change_password", methods=["GET", "POST"])
-# @login_required
-# def change_password():
-#     admin = db.execute("SELECT * FROM users WHERE username = 'admin'")
-
-#     if len(admin) == 1 and session["user_id"] == admin[0]["user_id"]:
-#         admin_id = admin[0]["user_id"]
-
-#     if request.method == "POST":
-#         if not request.form.get("username"):
-#             return error("Must provide username.", 400)
-#         elif not request.form.get("new_password"):
-#             return error("Must provide new password.", 400)
-#         elif not request.form.get("confirmation"):
-#             return error("Must provide password confirmation.", 400)
-
-#         if request.form.get("new_password") != request.form.get("confirmation"):
-#             return error("Passwords must match.", 400)
-
-#         hash_password = generate_password_hash(request.form.get("new_password"))
-
-#         db.execute("UPDATE users SET hash_password = ? WHERE username = ?", hash_password, request.form.get("username"))
-
-#         db.commit()
-#         cur.close() 
-      
-#         return redirect("/")
-
-#     else:
-#         return render_template("change_password.html", admin_id=admin_id)
-
-
-# @app.route("/information")
-# @login_required
-# def information():
-#     admin = db.execute("SELECT * FROM users WHERE username = 'admin'")
-#     if len(admin) == 1 and session["user_id"] == admin[0]["user_id"]:
-#         admin_id = admin[0]["user_id"]
-
-#     plants = db.execute("SELECT plant_name, duration_to_maturity_months, plant_spacing_metres, metres_squared_required, perennial_or_annual, january, february, march, april, may, june, july, august, september, october, november, december FROM plants ORDER BY plant_name")
-#     freetext_plants_from_user = db.execute("SELECT freetext_plants.plant_name, freetext_plants.duration_to_maturity_months, freetext_plants.plant_spacing_metres, freetext_plants.metres_squared_required, freetext_plants.perennial_or_annual, freetext_plants.january, freetext_plants.february, freetext_plants.march, freetext_plants.april, freetext_plants.may, freetext_plants.june, freetext_plants.july, freetext_plants.august, freetext_plants.september, freetext_plants.october, freetext_plants.november, freetext_plants.december FROM freetext_plants WHERE freetext_plants.user_id = ? ORDER BY freetext_plants.plant_name", int(session["user_id"]))
-
-#     companion_friends = []
-#     companion_friends_ids = db.execute("SELECT * FROM companion_friends")
-#     if len(companion_friends_ids) != 0:
-#         companion_friends = db.execute("SELECT plants_friends_a.plant_name AS companion_friends_plant_a, plants_friends_b.plant_name AS companion_friends_plant_b FROM companion_friends INNER JOIN plants AS plants_friends_a ON companion_friends.plant_id_a = plants_friends_a.plant_id INNER JOIN plants AS plants_friends_b ON companion_friends.plant_id_b = plants_friends_b.plant_id")
-
-#         deleted_row_quantity = 0
-#         original_range_for_i = len(companion_friends) - 1
-
-#         deleted_rows = []
-#         companion_friends_buffer = []
-
-#         for i in range(original_range_for_i):
-#             if i == original_range_for_i - deleted_row_quantity:
-#                 break
-#             for j in range(i + 1, original_range_for_i + 1):
-#                 if companion_friends[i]["companion_friends_plant_a"] == companion_friends[j]["companion_friends_plant_a"]:
-#                     if companion_friends[i]["companion_friends_plant_b"] == companion_friends[j]["companion_friends_plant_b"]:
-#                         deleted_rows.append(companion_friends[j])
-#                         deleted_row_quantity += 1
-#                         break
-#                 elif companion_friends[i]["companion_friends_plant_a"] == companion_friends[j]["companion_friends_plant_b"]:
-#                     if companion_friends[i]["companion_friends_plant_b"] == companion_friends[j]["companion_friends_plant_a"]:
-#                         deleted_rows.append(companion_friends[j])
-#                         deleted_row_quantity += 1
-#                         break
-
-#         for i in range(len(companion_friends)):
-#             if companion_friends[i] not in deleted_rows:
-#                 companion_friends_buffer.append(companion_friends[i])
-
-#         companion_friends = companion_friends_buffer
+@app.route("/change_password", methods=["GET", "POST"])
+@login_required
+def change_password():
+    with db.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+        cur.execute("SELECT * FROM users WHERE username = 'admin'");
+        admin = cur.fetchall()
+    
+        if len(admin) == 1 and session["user_id"] == admin[0]["user_id"]:
+            admin_id = admin[0]["user_id"]
+    
+        if request.method == "POST":
+            if not request.form.get("username"):
+                return error("Must provide username.", 400)
+            elif not request.form.get("new_password"):
+                return error("Must provide new password.", 400)
+            elif not request.form.get("confirmation"):
+                return error("Must provide password confirmation.", 400)
+    
+            if request.form.get("new_password") != request.form.get("confirmation"):
+                return error("Passwords must match.", 400)
+    
+            hash_password = generate_password_hash(request.form.get("new_password"))
+    
+            cur.execute("UPDATE users SET hash_password = %s WHERE username = %s", (hash_password, request.form.get("username")))
+            db.commit()
+          
+            return redirect("/")
+    
+        else:
+            return render_template("change_password.html", admin_id=admin_id)
 
 
-#     companion_enemies = []
-#     companion_enemies_ids = db.execute("SELECT * FROM companion_enemies")
-#     if len(companion_enemies_ids) != 0:
-#         companion_enemies = db.execute("SELECT plants_enemies_a.plant_name AS companion_enemies_plant_a, plants_enemies_b.plant_name AS companion_enemies_plant_b FROM companion_enemies INNER JOIN plants AS plants_enemies_a ON companion_enemies.plant_id_a = plants_enemies_a.plant_id INNER JOIN plants AS plants_enemies_b ON companion_enemies.plant_id_b = plants_enemies_b.plant_id")
+@app.route("/information")
+@login_required
+def information():
+     with db.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+        cur.execute("SELECT * FROM users WHERE username = 'admin'");
+        admin = cur.fetchall()
+         
+        if len(admin) == 1 and session["user_id"] == admin[0]["user_id"]:
+            admin_id = admin[0]["user_id"]
 
-#         deleted_row_quantity = 0
-#         original_range_for_i = len(companion_enemies) - 1
-
-#         deleted_rows = []
-#         companion_enemies_buffer = []
-
-#         for i in range(original_range_for_i):
-#             if i == original_range_for_i - deleted_row_quantity:
-#                 break
-#             for j in range(i + 1, original_range_for_i + 1):
-#                 if companion_enemies[i]["companion_enemies_plant_a"] == companion_enemies[j]["companion_enemies_plant_a"]:
-#                     if companion_enemies[i]["companion_enemies_plant_b"] == companion_enemies[j]["companion_enemies_plant_b"]:
-#                         deleted_rows.append(companion_enemies[j])
-#                         deleted_row_quantity += 1
-#                         break
-#                 elif companion_enemies[i]["companion_enemies_plant_a"] == companion_enemies[j]["companion_enemies_plant_b"]:
-#                     if companion_enemies[i]["companion_enemies_plant_b"] == companion_enemies[j]["companion_enemies_plant_a"]:
-#                         deleted_rows.append(companion_enemies[j])
-#                         deleted_row_quantity += 1
-#                         break
-
-#         for i in range(len(companion_enemies)):
-#             if companion_enemies[i] not in deleted_rows:
-#                 companion_enemies_buffer.append(companion_enemies[i])
-
-#         companion_enemies = companion_enemies_buffer
-
-#     return render_template("information.html", plants=plants, freetext_plants_from_user=freetext_plants_from_user, companion_friends=companion_friends, companion_enemies=companion_enemies, admin_id=admin_id)
+        cur.execute("SELECT plant_name, duration_to_maturity_months, plant_spacing_metres, metres_squared_required, perennial_or_annual, january, february, march, april, may, june, july, august, september, october, november, december FROM plants ORDER BY plant_name")
+        plants = cur.fetchall()
+        cur.execute("SELECT freetext_plants.plant_name, freetext_plants.duration_to_maturity_months, freetext_plants.plant_spacing_metres, freetext_plants.metres_squared_required, freetext_plants.perennial_or_annual, freetext_plants.january, freetext_plants.february, freetext_plants.march, freetext_plants.april, freetext_plants.may, freetext_plants.june, freetext_plants.july, freetext_plants.august, freetext_plants.september, freetext_plants.october, freetext_plants.november, freetext_plants.december FROM freetext_plants WHERE freetext_plants.user_id = %s ORDER BY freetext_plants.plant_name", (int(session["user_id"]),))
+        freetext_plants_from_user = cur.fetchall()
+         
+        companion_friends = []
+        cur.execute("SELECT * FROM companion_friends")
+        companion_friends_ids = cur.fetchall()
+         
+        if len(companion_friends_ids) != 0:
+            cur.execute("SELECT plants_friends_a.plant_name AS companion_friends_plant_a, plants_friends_b.plant_name AS companion_friends_plant_b FROM companion_friends INNER JOIN plants AS plants_friends_a ON companion_friends.plant_id_a = plants_friends_a.plant_id INNER JOIN plants AS plants_friends_b ON companion_friends.plant_id_b = plants_friends_b.plant_id")
+            companion_friends = cur.fetchall()  
+            
+            deleted_row_quantity = 0
+            original_range_for_i = len(companion_friends) - 1
+    
+            deleted_rows = []
+            companion_friends_buffer = []
+    
+            for i in range(original_range_for_i):
+                if i == original_range_for_i - deleted_row_quantity:
+                    break
+                for j in range(i + 1, original_range_for_i + 1):
+                    if companion_friends[i]["companion_friends_plant_a"] == companion_friends[j]["companion_friends_plant_a"]:
+                        if companion_friends[i]["companion_friends_plant_b"] == companion_friends[j]["companion_friends_plant_b"]:
+                            deleted_rows.append(companion_friends[j])
+                            deleted_row_quantity += 1
+                            break
+                    elif companion_friends[i]["companion_friends_plant_a"] == companion_friends[j]["companion_friends_plant_b"]:
+                        if companion_friends[i]["companion_friends_plant_b"] == companion_friends[j]["companion_friends_plant_a"]:
+                            deleted_rows.append(companion_friends[j])
+                            deleted_row_quantity += 1
+                            break
+    
+            for i in range(len(companion_friends)):
+                if companion_friends[i] not in deleted_rows:
+                    companion_friends_buffer.append(companion_friends[i])
+    
+            companion_friends = companion_friends_buffer
+    
+        companion_enemies = []
+        cur.execute("SELECT * FROM companion_enemies")
+        companion_enemies_ids = cur.fetchall()
+         
+        if len(companion_enemies_ids) != 0:
+            cur.execute("SELECT plants_enemies_a.plant_name AS companion_enemies_plant_a, plants_enemies_b.plant_name AS companion_enemies_plant_b FROM companion_enemies INNER JOIN plants AS plants_enemies_a ON companion_enemies.plant_id_a = plants_enemies_a.plant_id INNER JOIN plants AS plants_enemies_b ON companion_enemies.plant_id_b = plants_enemies_b.plant_id")
+            companion_enemies = cur.fetchall()
+                
+            deleted_row_quantity = 0
+            original_range_for_i = len(companion_enemies) - 1
+    
+            deleted_rows = []
+            companion_enemies_buffer = []
+    
+            for i in range(original_range_for_i):
+                if i == original_range_for_i - deleted_row_quantity:
+                    break
+                for j in range(i + 1, original_range_for_i + 1):
+                    if companion_enemies[i]["companion_enemies_plant_a"] == companion_enemies[j]["companion_enemies_plant_a"]:
+                        if companion_enemies[i]["companion_enemies_plant_b"] == companion_enemies[j]["companion_enemies_plant_b"]:
+                            deleted_rows.append(companion_enemies[j])
+                            deleted_row_quantity += 1
+                            break
+                    elif companion_enemies[i]["companion_enemies_plant_a"] == companion_enemies[j]["companion_enemies_plant_b"]:
+                        if companion_enemies[i]["companion_enemies_plant_b"] == companion_enemies[j]["companion_enemies_plant_a"]:
+                            deleted_rows.append(companion_enemies[j])
+                            deleted_row_quantity += 1
+                            break
+    
+            for i in range(len(companion_enemies)):
+                if companion_enemies[i] not in deleted_rows:
+                    companion_enemies_buffer.append(companion_enemies[i])
+    
+            companion_enemies = companion_enemies_buffer
+    
+        return render_template("information.html", plants=plants, freetext_plants_from_user=freetext_plants_from_user, companion_friends=companion_friends, companion_enemies=companion_enemies, admin_id=admin_id)
 
 
 @app.route("/login", methods=["GET", "POST"])
