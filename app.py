@@ -20,19 +20,20 @@ from retry_requests import retry
 
 app = Flask(__name__)
 
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
+# app.config["SESSION_PERMANENT"] = False
+# app.config["SESSION_TYPE"] = "filesystem"
+# Session(app)
 
-db = psycopg2.connect(host=os.environ['DB_HOST'], 
-                      port=int(os.environ['DB_PORT']),
-                      database=os.environ['DB_NAME'],
-                      user=os.environ['DB_USER'],       
-                      password=os.environ['DB_PASSWORD'])
+# db = psycopg2.connect(host=os.environ['DB_HOST'], 
+#                       port=int(os.environ['DB_PORT']),
+#                       database=os.environ['DB_NAME'],
+#                       user=os.environ['DB_USER'],       
+#                       password=os.environ['DB_PASSWORD'])
                      
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+  app.run
+    # port = int(os.environ.get("PORT", 10000))
+    # app.run(host="0.0.0.0", port=port)
    
 # @app.after_request
 # def after_request(response):
