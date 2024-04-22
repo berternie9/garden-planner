@@ -490,407 +490,465 @@ def index():
             return render_template("index.html", space_remaining_each_month=space_remaining_each_month, all_plant_names_in_garden=all_plant_names_in_garden, total_different_plants_in_garden=total_different_plants_in_garden, garden_ids_from_user=garden_ids_from_user, planted_gardens_from_user=planted_gardens_from_user, number_of_gardens_from_user=number_of_gardens_from_user, admin_id=admin_id, months_of_year=months_of_year)
   
 
-# @app.route("/admin", methods=["GET", "POST"])
-# @login_required
-# def admin():
-#     admin = db.execute("SELECT * FROM users WHERE username = 'admin'")
-
-#     if len(admin) == 1 and session["user_id"] == admin[0]["user_id"]:
-#         admin_id = admin[0]["user_id"]
-#         if request.method == "POST":
-#             # Insert new data from admin page into database
-
-#             if request.form.get("add_plant_button"):
-#                 if not request.form.get("plant_name_add"):
-#                     return error("Must provide plant name.", 400)
-#                 elif not request.form.get("duration_to_maturity_months_add"):
-#                     return error("Must provide duration to maturity (months).", 400)
-#                 elif not request.form.get("plant_spacing_metres_add"):
-#                     return error("Must provide spacing (metres).", 400)
-#                 elif not request.form.get("metres_squared_required_add"):
-#                     return error("Must provide space required (metres squared).", 400)
-#                 elif not request.form.get("perennial_or_annual_add"):
-#                     return error("Must specify perennial or annual.", 400)
-
-#                 if not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_add")) or not request.form.get("plant_name_add").islower():
-#                     return error("Plant name must be lowercase and alphabetical.", 400)
-
-#                 try:
-#                     duration_to_maturity_months_add = int(request.form.get("duration_to_maturity_months_add"))
-#                 except ValueError:
-#                     return error("Duration to maturity (months) must be integer.", 400)
-
-#                 if duration_to_maturity_months_add <= 0:
-#                         return error("Duration to maturity (months) must be positive number.", 400)
-
-#                 try:
-#                     plant_spacing_metres_add = int(request.form.get("plant_spacing_metres_add"))
-#                 except ValueError:
-#                     try:
-#                         plant_spacing_metres_add = float(request.form.get("plant_spacing_metres_add"))
-#                     except ValueError:
-#                         return error("Spacing (metres) must be integer or decimal number.", 400)
-
-#                 if plant_spacing_metres_add <= 0:
-#                     return error("Spacing (metres) must be positive number.", 400)
-
-#                 try:
-#                     metres_squared_required_add = int(request.form.get("metres_squared_required_add"))
-#                 except ValueError:
-#                     try:
-#                         metres_squared_required_add = float(request.form.get("metres_squared_required_add"))
-#                     except ValueError:
-#                         return error("Required space per plant (metres squared) must be integer or decimal number.", 400)
-
-#                 if metres_squared_required_add <= 0:
-#                     return error("Required space per plant (metres squared) must be positive number.", 400)
-
-#                 if request.form.get("perennial_or_annual_add") != "perennial" and request.form.get("perennial_or_annual_add") != "annual":
-#                     return error("Must select either perennial or annual.", 400)
-
-#                 january_add = "no"
-#                 february_add = "no"
-#                 march_add = "no"
-#                 april_add = "no"
-#                 may_add = "no"
-#                 june_add = "no"
-#                 july_add = "no"
-#                 august_add = "no"
-#                 september_add = "no"
-#                 october_add = "no"
-#                 november_add = "no"
-#                 december_add = "no"
-
-#                 if request.form.get("january_add") == "yes":
-#                     january_add = "yes"
-#                 if request.form.get("february_add") == "yes":
-#                     february_add = "yes"
-#                 if request.form.get("march_add") == "yes":
-#                     march_add = "yes"
-#                 if request.form.get("april_add") == "yes":
-#                     april_add = "yes"
-#                 if request.form.get("may_add") == "yes":
-#                     may_add = "yes"
-#                 if request.form.get("june_add") == "yes":
-#                     june_add = "yes"
-#                 if request.form.get("july_add") == "yes":
-#                     july_add = "yes"
-#                 if request.form.get("august_add") == "yes":
-#                     august_add = "yes"
-#                 if request.form.get("september_add") == "yes":
-#                     september_add = "yes"
-#                 if request.form.get("october_add") == "yes":
-#                     october_add = "yes"
-#                 if request.form.get("november_add") == "yes":
-#                     november_add = "yes"
-#                 if request.form.get("december_add") == "yes":
-#                     december_add = "yes"
-
-#                 db.execute("INSERT INTO plants (plant_name, duration_to_maturity_months, plant_spacing_metres, metres_squared_required, perennial_or_annual, january, february, march, april, may, june, july, august, september, october, november, december) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", request.form.get("plant_name_add"), duration_to_maturity_months_add, plant_spacing_metres_add, metres_squared_required_add, request.form.get("perennial_or_annual_add"), january_add, february_add, march_add, april_add, may_add, june_add, july_add, august_add, september_add, october_add, november_add, december_add)
-                
-#                 db.commit()
-#                 cur.close() 
-              
-#                 return redirect("/admin")
-
-#             if request.form.get("remove_plant_button"):
-#                 if not request.form.get("plant_name_remove"):
-#                     return error("Must provide plant name.", 400)
-#                 if not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_remove")) or not request.form.get("plant_name_remove").islower():
-#                     return error("Plant name must be lowercase and alphabetical.", 400)
-
-#                 plant_names = db.execute("SELECT plant_name from plants WHERE freetext ='no'")
-#                 freetext_plant_names_from_user = db.execute("SELECT plants.plant_name FROM plants INNER JOIN freetext_plants_users ON plants.plant_id = freetext_plants_users.plant_id WHERE plants.freetext = 'yes' AND freetext_plants_users.user_id = ?", int(session["user_id"]))
-
-#                 is_plant_in_db = False
-
-#                 for i in range(len(plant_names)):
-#                     if plant_names[i]["plant_name"] == request.form.get("plant_name_remove"):
-#                         is_plant_in_db = True
-
-#                 for i in range(len(freetext_plant_names_from_user)):
-#                     if freetext_plant_names_from_user[i]["plant_name"] == request.form.get("plant_name_remove"):
-#                         is_plant_in_db = True
-
-#                 if is_plant_in_db == False:
-#                     return error("Plant name not found.", 400)
-
-#                 plant_id = db.execute("SELECT plant_id FROM plants WHERE plant_name = ?", request.form.get("plant_name_remove"))
-
-#                 db.execute("DELETE FROM plants WHERE plant_id = ?", plant_id[0]["plant_id"])
-#                 db.execute("DELETE FROM planted_in_gardens WHERE plant_id = ?", plant_id[0]["plant_id"])
-#                 db.execute("DELETE FROM companion_friends WHERE plant_id_a = ? OR plant_id_b = ?", plant_id[0]["plant_id"], plant_id[0]["plant_id"])
-#                 db.execute("DELETE FROM companion_enemies WHERE plant_id_a = ? OR plant_id_b = ?", plant_id[0]["plant_id"], plant_id[0]["plant_id"])
-
-#                 db.commit()
-#                 cur.close() 
-              
-#                 return redirect("/admin")
-
-#             if request.form.get("update_plant_button"):
-#                 if not request.form.get("plant_name_update"):
-#                     return error("Must provide plant name.", 400)
-#                 elif not request.form.get("duration_to_maturity_months_update"):
-#                     return error("Must provide duration to maturity (months).", 400)
-#                 elif not request.form.get("plant_spacing_metres_update"):
-#                     return error("Must provide spacing (metres).", 400)
-#                 elif not request.form.get("metres_squared_required_update"):
-#                     return error("Must provide space required (metres squared).", 400)
-#                 elif not request.form.get("perennial_or_annual_update"):
-#                     return error("Must specify perennial or annual.", 400)
-
-#                 if not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_update")) or not request.form.get("plant_name_update").islower():
-#                     return error("Plant name must be lowercase and alphabetical.", 400)
-
-#                 plant_name = request.form.get("plant_name_update")
-#                 if request.form.get("new_plant_name_update"):
-#                     if not all(x.isalpha() or x.isspace() for x in request.form.get("new_plant_name_update")) or not request.form.get("new_plant_name_update").islower():
-#                         return error("New plant name must be lowercase and alphabetical.", 400)
-#                     plant_name = request.form.get("new_plant_name_update")
-
-#                 try:
-#                     duration_to_maturity_months_update = int(request.form.get("duration_to_maturity_months_update"))
-#                 except ValueError:
-#                     return error("Duration to maturity (months) must be integer.", 400)
-
-#                 if duration_to_maturity_months_update <= 0:
-#                         return error("Duration to maturity (months) must be positive number.", 400)
-
-#                 try:
-#                     plant_spacing_metres_update = int(request.form.get("plant_spacing_metres_update"))
-#                 except ValueError:
-#                     try:
-#                         plant_spacing_metres_update = float(request.form.get("plant_spacing_metres_update"))
-#                     except ValueError:
-#                         return error("Spacing (metres) must be integer or decimal number.", 400)
-
-#                 if plant_spacing_metres_update <= 0:
-#                     return error("Spacing (metres) must be positive number.", 400)
-
-#                 try:
-#                     metres_squared_required_update = int(request.form.get("metres_squared_required_update"))
-#                 except ValueError:
-#                     try:
-#                         metres_squared_required_update = float(request.form.get("metres_squared_required_update"))
-#                     except ValueError:
-#                         return error("Required space per plant (metres squared) must be integer or decimal number.", 400)
-
-#                 if metres_squared_required_update <= 0:
-#                     return error("Required space per plant (metres squared) must be positive number.", 400)
-
-#                 if request.form.get("perennial_or_annual_update") != "perennial" and request.form.get("perennial_or_annual_update") != "annual":
-#                     return error("Must select either perennial or annual.", 400)
-
-#                 january_update = "no"
-#                 february_update = "no"
-#                 march_update = "no"
-#                 april_update = "no"
-#                 may_update = "no"
-#                 june_update = "no"
-#                 july_update = "no"
-#                 august_update = "no"
-#                 september_update = "no"
-#                 october_update = "no"
-#                 november_update = "no"
-#                 december_update = "no"
-
-#                 if request.form.get("january_update") == "yes":
-#                     january_add = "yes"
-#                 if request.form.get("february_update") == "yes":
-#                     february_add = "yes"
-#                 if request.form.get("march_update") == "yes":
-#                     march_add = "yes"
-#                 if request.form.get("april_update") == "yes":
-#                     april_add = "yes"
-#                 if request.form.get("may_update") == "yes":
-#                     may_add = "yes"
-#                 if request.form.get("june_update") == "yes":
-#                     june_add = "yes"
-#                 if request.form.get("july_update") == "yes":
-#                     july_add = "yes"
-#                 if request.form.get("august_update") == "yes":
-#                     august_add = "yes"
-#                 if request.form.get("september_update") == "yes":
-#                     september_add = "yes"
-#                 if request.form.get("october_update") == "yes":
-#                     october_add = "yes"
-#                 if request.form.get("november_update") == "yes":
-#                     november_add = "yes"
-#                 if request.form.get("december_update") == "yes":
-#                     december_add = "yes"
-
-#                 db.execute("UPDATE plants SET plant_name = ?, duration_to_maturity_months = ?, plant_spacing_metres = ?, metres_squared_required = ?, perennial_or_annual = ?, january = ?, february = ?, march = ?, april = ?, may = ?, june = ?, july = ?, august = ?, september = ?, october = ?, november = ?, december = ? WHERE plant_name = ?", plant_name, duration_to_maturity_months_update, plant_spacing_metres_update, metres_squared_required_update, request.form.get("perennial_or_annual_update"), january_update, february_update, march_update, april_update, may_update, june_update, july_update, august_update, september_update, october_update, november_update, december_update, request.form.get("plant_name_update"))
-                
-#                 db.commit()
-#                 cur.close() 
-              
-#                 return redirect("/admin")
-
-#             if request.form.get("add_companion_friends_button"):
-#                 if not request.form.get("plant_name_add_friend_a"):
-#                     return error("Must provide plant A name.", 400)
-#                 elif not request.form.get("plant_name_add_friend_b"):
-#                     return error("Must provide plant B name.", 400)
-
-#                 if not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_add_friend_a")) or not request.form.get("plant_name_add_friend_a").islower():
-#                     return error("Plant A name must be lowercase and alphabetical.", 400)
-#                 elif not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_add_friend_b")) or not request.form.get("plant_name_add_friend_b").islower():
-#                     return error("Plant B name must be lowercase and alphabetical.", 400)
-
-#                 plant_names = db.execute("SELECT plant_name from plants")
-#                 freetext_plant_names_from_user = db.execute("SELECT plant_name FROM freetext_plants WHERE user_id = ?", int(session["user_id"]))
-
-#                 is_plant_a_in_db = False
-#                 is_plant_b_in_db = False
-#                 for i in range(len(plant_names)):
-#                     if plant_names[i]["plant_name"] == request.form.get("plant_name_add_friend_a"):
-#                         is_plant_a_in_db = True
-#                     if plant_names[i]["plant_name"] == request.form.get("plant_name_add_friend_b"):
-#                         is_plant_b_in_db = True
-
-#                 for i in range(len(freetext_plant_names_from_user)):
-#                     if freetext_plant_names_from_user[i]["plant_name"] == request.form.get("plant_name_add_friend_a"):
-#                         is_plant_a_in_db = True
-#                     if freetext_plant_names_from_user[i]["plant_name"] == request.form.get("plant_name_add_friend_b"):
-#                         is_plant_b_in_db = True
-
-#                 if not is_plant_a_in_db:
-#                     return error("Plant A name not found. Consider adding as freetext before trying again.", 400)
-#                 if not is_plant_b_in_db:
-#                     return error("Plant B name not found. Consider adding as freetext before trying again.", 400)
-
-#                 plant_a_id = db.execute("SELECT plant_id FROM plants WHERE plant_name = ?", request.form.get("plant_name_add_friend_a"))
-#                 plant_b_id = db.execute("SELECT plant_id FROM plants WHERE plant_name = ?", request.form.get("plant_name_add_friend_b"))
-
-#                 db.execute("INSERT INTO companion_friends (plant_id_a, plant_id_b) VALUES (?, ?)", plant_a_id[0]["plant_id"], plant_b_id[0]["plant_id"])
-
-#                 db.commit()
-#                 cur.close() 
-              
-#                 return redirect("/admin")
-
-#             if request.form.get("remove_companion_friends_button"):
-#                 if not request.form.get("plant_name_remove_friend_a"):
-#                     return error("Must provide plant A name.", 400)
-#                 elif not request.form.get("plant_name_remove_friend_b"):
-#                     return error("Must provide plant B name.", 400)
-
-#                 if not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_remove_friend_a")) or not request.form.get("plant_name_remove_friend_a").islower():
-#                     return error("Plant A name must be lowercase and alphabetical.", 400)
-#                 elif not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_remove_friend_b")) or not request.form.get("plant_name_remove_friend_b").islower():
-#                     return error("Plant B name must be lowercase and alphabetical.", 400)
-
-#                 plant_a_id = db.execute("SELECT plant_id FROM plants WHERE plant_name = ?", request.form.get("plant_name_remove_friend_a"))
-#                 plant_b_id = db.execute("SELECT plant_id FROM plants WHERE plant_name = ?", request.form.get("plant_name_remove_friend_b"))
-
-#                 companion_friends = db.execute("SELECT * FROM companion_friends")
-
-#                 are_plants_a_and_b_friends = False
-
-#                 for i in range(len(companion_friends)):
-#                     if companion_friends[i]["plant_id_a"] == plant_a_id[0]["plant_id"]:
-#                         if companion_friends[i]["plant_id_b"] == plant_b_id[0]["plant_id"]:
-#                             are_plants_a_and_b_friends = True
-#                     if companion_friends[i]["plant_id_b"] == plant_a_id[0]["plant_id"]:
-#                         if companion_friends[i]["plant_id_a"] == plant_b_id[0]["plant_id"]:
-#                             are_plants_a_and_b_friends = True
-
-#                 if not are_plants_a_and_b_friends:
-#                     return error("Plants A and B are not friends.", 400)
-
-#                 db.execute("DELETE FROM companion_friends WHERE plant_id_a = ? AND plant_id_b = ?", plant_a_id[0]["plant_id"], plant_b_id[0]["plant_id"])
-#                 db.execute("DELETE FROM companion_friends WHERE plant_id_a = ? AND plant_id_b = ?", plant_b_id[0]["plant_id"], plant_a_id[0]["plant_id"])
-
-#                 db.commit()
-#                 cur.close() 
-              
-#                 return redirect("/admin")
-
-#             if request.form.get("add_companion_enemies_button"):
-#                 if not request.form.get("plant_name_add_enemy_a"):
-#                     return error("Must provide plant A name.", 400)
-#                 elif not request.form.get("plant_name_add_enemy_b"):
-#                     return error("Must provide plant B name.", 400)
-
-#                 if not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_add_enemy_a")) or not request.form.get("plant_name_add_enemy_a").islower():
-#                     return error("Plant A name must be lowercase and alphabetical.", 400)
-#                 elif not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_add_enemy_b")) or not request.form.get("plant_name_add_enemy_b").islower():
-#                     return error("Plant B name must be lowercase and alphabetical.", 400)
-
-#                 plant_names = db.execute("SELECT plant_name from plants")
-#                 freetext_plant_names_from_user = db.execute("SELECT plant_name FROM freetext_plants WHERE user_id = ?", int(session["user_id"]))
-
-#                 is_plant_a_in_db = False
-#                 is_plant_b_in_db = False
-#                 for i in range(len(plant_names)):
-#                     if plant_names[i]["plant_name"] == request.form.get("plant_name_add_enemy_a"):
-#                         is_plant_a_in_db = True
-#                     if plant_names[i]["plant_name"] == request.form.get("plant_name_add_enemy_b"):
-#                         is_plant_b_in_db = True
-
-#                 for i in range(len(freetext_plant_names_from_user)):
-#                     if freetext_plant_names_from_user[i]["plant_name"] == request.form.get("plant_name_add_enemy_a"):
-#                         is_plant_a_in_db = True
-#                     if freetext_plant_names_from_user[i]["plant_name"] == request.form.get("plant_name_add_enemy_b"):
-#                         is_plant_b_in_db = True
-
-#                 if not is_plant_a_in_db:
-#                     return error("Plant A name not found. Consider adding as freetext before trying again.", 400)
-#                 if not is_plant_b_in_db:
-#                     return error("Plant B name not found. Consider adding as freetext before trying again.", 400)
-
-#                 plant_a_id = db.execute("SELECT plant_id FROM plants WHERE plant_name = ?", request.form.get("plant_name_add_enemy_a"))
-#                 plant_b_id = db.execute("SELECT plant_id FROM plants WHERE plant_name = ?", request.form.get("plant_name_add_enemy_b"))
-
-#                 db.execute("INSERT INTO companion_enemies (plant_id_a, plant_id_b) VALUES (?, ?)", plant_a_id[0]["plant_id"], plant_b_id[0]["plant_id"])
-                
-#                 db.commit()
-#                 cur.close() 
-              
-#                 return redirect("/admin")
-
-#             if request.form.get("remove_companion_enemies_button"):
-#                 if not request.form.get("plant_name_remove_enemy_a"):
-#                     return error("Must provide plant A name.", 400)
-#                 elif not request.form.get("plant_name_remove_enemy_b"):
-#                     return error("Must provide plant B name.", 400)
-
-#                 if not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_remove_enemy_a")) or not request.form.get("plant_name_remove_enemy_a").islower():
-#                     return error("Plant A name must be lowercase and alphabetical.", 400)
-#                 elif not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_remove_enemy_b")) or not request.form.get("plant_name_remove_enemy_b").islower():
-#                     return error("Plant B name must be lowercase and alphabetical.", 400)
-
-#                 plant_a_id = db.execute("SELECT plant_id FROM plants WHERE plant_name = ?", request.form.get("plant_name_remove_enemy_a"))
-#                 plant_b_id = db.execute("SELECT plant_id FROM plants WHERE plant_name = ?", request.form.get("plant_name_remove_enemy_b"))
-
-#                 companion_enemies = db.execute("SELECT * FROM companion_enemies")
-
-#                 are_plants_a_and_b_enemies = False
-
-#                 for i in range(len(companion_friends)):
-#                     if companion_enemies[i]["plant_id_a"] == plant_a_id[0]["plant_id"]:
-#                         if companion_enemies[i]["plant_id_b"] == plant_b_id[0]["plant_id"]:
-#                             are_plants_a_and_b_friends = True
-#                     if companion_enemies[i]["plant_id_b"] == plant_a_id[0]["plant_id"]:
-#                         if companion_enemies[i]["plant_id_a"] == plant_b_id[0]["plant_id"]:
-#                             are_plants_a_and_b_enemies = True
-
-#                 if not are_plants_a_and_b_enemies:
-#                     return error("Plants A and B are not enemies.", 400)
-
-#                 db.execute("DELETE FROM companion_enemies WHERE plant_id_a = ? AND plant_id_b = ?", plant_a_id[0]["plant_id"], plant_b_id[0]["plant_id"])
-#                 db.execute("DELETE FROM companion_enemies WHERE plant_id_a = ? AND plant_id_b = ?", plant_b_id[0]["plant_id"], plant_a_id[0]["plant_id"])
-
-#                 db.commit()
-#                 cur.close() 
-              
-#                 return redirect("/admin")
-
-#         else:
-#             return render_template("admin.html", admin_id=admin_id)
-
-#     else:
-#         return error("You are not an admin.", 401)
+@app.route("/admin", methods=["GET", "POST"])
+@login_required
+def admin():
+    with db.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+        cur.execute("SELECT * FROM users WHERE username = %s", ('admin',))
+        admin = cur.fetchall()
+        if len(admin) == 1 and session["user_id"] == admin[0]["user_id"]:
+            admin_id = admin[0]["user_id"]
+            if request.method == "POST":
+                # Insert new data from admin page into database
+    
+                if request.form.get("add_plant_button"):
+                    if not request.form.get("plant_name_add"):
+                        return error("Must provide plant name.", 400)
+                    elif not request.form.get("duration_to_maturity_months_add"):
+                        return error("Must provide duration to maturity (months).", 400)
+                    elif not request.form.get("plant_spacing_metres_add"):
+                        return error("Must provide spacing (metres).", 400)
+                    elif not request.form.get("metres_squared_required_add"):
+                        return error("Must provide space required (metres squared).", 400)
+                    elif not request.form.get("perennial_or_annual_add"):
+                        return error("Must specify perennial or annual.", 400)
+    
+                    if not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_add")) or not request.form.get("plant_name_add").islower():
+                        return error("Plant name must be lowercase and alphabetical.", 400)
+    
+                    try:
+                        duration_to_maturity_months_add = int(request.form.get("duration_to_maturity_months_add"))
+                    except ValueError:
+                        return error("Duration to maturity (months) must be integer.", 400)
+    
+                    if duration_to_maturity_months_add <= 0:
+                            return error("Duration to maturity (months) must be positive number.", 400)
+    
+                    try:
+                        plant_spacing_metres_add = int(request.form.get("plant_spacing_metres_add"))
+                    except ValueError:
+                        try:
+                            plant_spacing_metres_add = float(request.form.get("plant_spacing_metres_add"))
+                        except ValueError:
+                            return error("Spacing (metres) must be integer or decimal number.", 400)
+    
+                    if plant_spacing_metres_add <= 0:
+                        return error("Spacing (metres) must be positive number.", 400)
+    
+                    try:
+                        metres_squared_required_add = int(request.form.get("metres_squared_required_add"))
+                    except ValueError:
+                        try:
+                            metres_squared_required_add = float(request.form.get("metres_squared_required_add"))
+                        except ValueError:
+                            return error("Required space per plant (metres squared) must be integer or decimal number.", 400)
+    
+                    if metres_squared_required_add <= 0:
+                        return error("Required space per plant (metres squared) must be positive number.", 400)
+    
+                    if request.form.get("perennial_or_annual_add") != "perennial" and request.form.get("perennial_or_annual_add") != "annual":
+                        return error("Must select either perennial or annual.", 400)
+    
+                    january_add = "no"
+                    february_add = "no"
+                    march_add = "no"
+                    april_add = "no"
+                    may_add = "no"
+                    june_add = "no"
+                    july_add = "no"
+                    august_add = "no"
+                    september_add = "no"
+                    october_add = "no"
+                    november_add = "no"
+                    december_add = "no"
+    
+                    if request.form.get("january_add") == "yes":
+                        january_add = "yes"
+                    if request.form.get("february_add") == "yes":
+                        february_add = "yes"
+                    if request.form.get("march_add") == "yes":
+                        march_add = "yes"
+                    if request.form.get("april_add") == "yes":
+                        april_add = "yes"
+                    if request.form.get("may_add") == "yes":
+                        may_add = "yes"
+                    if request.form.get("june_add") == "yes":
+                        june_add = "yes"
+                    if request.form.get("july_add") == "yes":
+                        july_add = "yes"
+                    if request.form.get("august_add") == "yes":
+                        august_add = "yes"
+                    if request.form.get("september_add") == "yes":
+                        september_add = "yes"
+                    if request.form.get("october_add") == "yes":
+                        october_add = "yes"
+                    if request.form.get("november_add") == "yes":
+                        november_add = "yes"
+                    if request.form.get("december_add") == "yes":
+                        december_add = "yes"
+    
+                    cur.execute(
+                        "INSERT INTO plants (plant_name, duration_to_maturity_months, plant_spacing_metres, metres_squared_required, perennial_or_annual, january, february, march, april, may, june, july, august, september, october, november, december) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                        (
+                            request.form.get("plant_name_add"),
+                            duration_to_maturity_months_add,
+                            plant_spacing_metres_add,
+                            metres_squared_required_add,
+                            request.form.get("perennial_or_annual_add"),
+                            january_add,
+                            february_add,
+                            march_add,
+                            april_add,
+                            may_add,
+                            june_add,
+                            july_add,
+                            august_add,
+                            september_add,
+                            october_add,
+                            november_add,
+                            december_add
+                        )
+                    )
+                    db.commit()
+                    return redirect("/admin")
+    
+                if request.form.get("remove_plant_button"):
+                    if not request.form.get("plant_name_remove"):
+                        return error("Must provide plant name.", 400)
+                    if not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_remove")) or not request.form.get("plant_name_remove").islower():
+                        return error("Plant name must be lowercase and alphabetical.", 400)
+    
+                    cur.execute("SELECT plant_name FROM plants WHERE freetext = %s", ('no',))
+                    plant_names = cur.fetchall()
+
+                    cur.execute(
+                        """
+                        SELECT plants.plant_name 
+                        FROM plants 
+                        INNER JOIN freetext_plants_users 
+                        ON plants.plant_id = freetext_plants_users.plant_id 
+                        WHERE plants.freetext = %s AND freetext_plants_users.user_id = %s
+                        """,
+                        ('yes', int(session["user_id"]))  
+                    )
+                    freetext_plant_names_from_user = cur.fetchall()
+
+                    is_plant_in_db = False
+    
+                    for i in range(len(plant_names)):
+                        if plant_names[i]["plant_name"] == request.form.get("plant_name_remove"):
+                            is_plant_in_db = True
+    
+                    for i in range(len(freetext_plant_names_from_user)):
+                        if freetext_plant_names_from_user[i]["plant_name"] == request.form.get("plant_name_remove"):
+                            is_plant_in_db = True
+    
+                    if is_plant_in_db == False:
+                        return error("Plant name not found.", 400)
+    
+                    cur.execute("SELECT plant_id FROM plants WHERE plant_name = %s", (request.form.get("plant_name_remove"),))
+                    plant_id = cur.fetchone()
+    
+                    cur.execute("DELETE FROM plants WHERE plant_id = %s", (plant_id[0]["plant_id"],))
+                    cur.execute("DELETE FROM planted_in_gardens WHERE plant_id = %s", (plant_id[0]["plant_id"],))
+                    cur.execute("DELETE FROM companion_friends WHERE plant_id_a = %s OR plant_id_b = %s", (plant_id[0]["plant_id"], plant_id[0]["plant_id"]))
+                    cur.execute("DELETE FROM companion_enemies WHERE plant_id_a = %s OR plant_id_b = %s", (plant_id[0]["plant_id"], plant_id[0]["plant_id"]))
+                    
+                    db.commit()
+                    
+                    return redirect("/admin")
+    
+                if request.form.get("update_plant_button"):
+                    if not request.form.get("plant_name_update"):
+                        return error("Must provide plant name.", 400)
+                    elif not request.form.get("duration_to_maturity_months_update"):
+                        return error("Must provide duration to maturity (months).", 400)
+                    elif not request.form.get("plant_spacing_metres_update"):
+                        return error("Must provide spacing (metres).", 400)
+                    elif not request.form.get("metres_squared_required_update"):
+                        return error("Must provide space required (metres squared).", 400)
+                    elif not request.form.get("perennial_or_annual_update"):
+                        return error("Must specify perennial or annual.", 400)
+    
+                    if not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_update")) or not request.form.get("plant_name_update").islower():
+                        return error("Plant name must be lowercase and alphabetical.", 400)
+    
+                    plant_name = request.form.get("plant_name_update")
+                    if request.form.get("new_plant_name_update"):
+                        if not all(x.isalpha() or x.isspace() for x in request.form.get("new_plant_name_update")) or not request.form.get("new_plant_name_update").islower():
+                            return error("New plant name must be lowercase and alphabetical.", 400)
+                        plant_name = request.form.get("new_plant_name_update")
+    
+                    try:
+                        duration_to_maturity_months_update = int(request.form.get("duration_to_maturity_months_update"))
+                    except ValueError:
+                        return error("Duration to maturity (months) must be integer.", 400)
+    
+                    if duration_to_maturity_months_update <= 0:
+                            return error("Duration to maturity (months) must be positive number.", 400)
+    
+                    try:
+                        plant_spacing_metres_update = int(request.form.get("plant_spacing_metres_update"))
+                    except ValueError:
+                        try:
+                            plant_spacing_metres_update = float(request.form.get("plant_spacing_metres_update"))
+                        except ValueError:
+                            return error("Spacing (metres) must be integer or decimal number.", 400)
+    
+                    if plant_spacing_metres_update <= 0:
+                        return error("Spacing (metres) must be positive number.", 400)
+    
+                    try:
+                        metres_squared_required_update = int(request.form.get("metres_squared_required_update"))
+                    except ValueError:
+                        try:
+                            metres_squared_required_update = float(request.form.get("metres_squared_required_update"))
+                        except ValueError:
+                            return error("Required space per plant (metres squared) must be integer or decimal number.", 400)
+    
+                    if metres_squared_required_update <= 0:
+                        return error("Required space per plant (metres squared) must be positive number.", 400)
+    
+                    if request.form.get("perennial_or_annual_update") != "perennial" and request.form.get("perennial_or_annual_update") != "annual":
+                        return error("Must select either perennial or annual.", 400)
+    
+                    january_update = "no"
+                    february_update = "no"
+                    march_update = "no"
+                    april_update = "no"
+                    may_update = "no"
+                    june_update = "no"
+                    july_update = "no"
+                    august_update = "no"
+                    september_update = "no"
+                    october_update = "no"
+                    november_update = "no"
+                    december_update = "no"
+    
+                    if request.form.get("january_update") == "yes":
+                        january_add = "yes"
+                    if request.form.get("february_update") == "yes":
+                        february_add = "yes"
+                    if request.form.get("march_update") == "yes":
+                        march_add = "yes"
+                    if request.form.get("april_update") == "yes":
+                        april_add = "yes"
+                    if request.form.get("may_update") == "yes":
+                        may_add = "yes"
+                    if request.form.get("june_update") == "yes":
+                        june_add = "yes"
+                    if request.form.get("july_update") == "yes":
+                        july_add = "yes"
+                    if request.form.get("august_update") == "yes":
+                        august_add = "yes"
+                    if request.form.get("september_update") == "yes":
+                        september_add = "yes"
+                    if request.form.get("october_update") == "yes":
+                        october_add = "yes"
+                    if request.form.get("november_update") == "yes":
+                        november_add = "yes"
+                    if request.form.get("december_update") == "yes":
+                        december_add = "yes"
+    
+                    cur.execute(
+                        "UPDATE plants SET plant_name = %s, duration_to_maturity_months = %s, plant_spacing_metres = %s, metres_squared_required = %s, perennial_or_annual = %s, january = %s, february = %s, march = %s, april = %s, may = %s, june = %s, july = %s, august = %s, september = %s, october = %s, november = %s, december = %s WHERE plant_name = %s",
+                        (
+                            plant_name,
+                            duration_to_maturity_months_update,
+                            plant_spacing_metres_update,
+                            metres_squared_required_update,
+                            request.form.get("perennial_or_annual_update"),
+                            january_update,
+                            february_update,
+                            march_update,
+                            april_update,
+                            may_update,
+                            june_update,
+                            july_update,
+                            august_update,
+                            september_update,
+                            october_update,
+                            november_update,
+                            december_update,
+                            request.form.get("plant_name_update"),
+                        ),
+                    )
+                    db.commit()
+                  
+                    return redirect("/admin")
+    
+                if request.form.get("add_companion_friends_button"):
+                    if not request.form.get("plant_name_add_friend_a"):
+                        return error("Must provide plant A name.", 400)
+                    elif not request.form.get("plant_name_add_friend_b"):
+                        return error("Must provide plant B name.", 400)
+    
+                    if not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_add_friend_a")) or not request.form.get("plant_name_add_friend_a").islower():
+                        return error("Plant A name must be lowercase and alphabetical.", 400)
+                    elif not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_add_friend_b")) or not request.form.get("plant_name_add_friend_b").islower():
+                        return error("Plant B name must be lowercase and alphabetical.", 400)
+    
+                    cur.execute("SELECT plant_name FROM plants")
+                    plant_names = cur.fetchall()
+                    cur.execute("SELECT plant_name FROM freetext_plants WHERE user_id = %s", (int(session["user_id"]),))
+                    freetext_plant_names_from_user = cur.fetchall()
+                        
+                    is_plant_a_in_db = False
+                    is_plant_b_in_db = False
+                    for i in range(len(plant_names)):
+                        if plant_names[i]["plant_name"] == request.form.get("plant_name_add_friend_a"):
+                            is_plant_a_in_db = True
+                        if plant_names[i]["plant_name"] == request.form.get("plant_name_add_friend_b"):
+                            is_plant_b_in_db = True
+    
+                    for i in range(len(freetext_plant_names_from_user)):
+                        if freetext_plant_names_from_user[i]["plant_name"] == request.form.get("plant_name_add_friend_a"):
+                            is_plant_a_in_db = True
+                        if freetext_plant_names_from_user[i]["plant_name"] == request.form.get("plant_name_add_friend_b"):
+                            is_plant_b_in_db = True
+    
+                    if not is_plant_a_in_db:
+                        return error("Plant A name not found. Consider adding as freetext before trying again.", 400)
+                    if not is_plant_b_in_db:
+                        return error("Plant B name not found. Consider adding as freetext before trying again.", 400)
+  
+                    cur.execute("SELECT plant_id FROM plants WHERE plant_name = %s", (request.form.get("plant_name_add_friend_a"),))
+                    plant_a_id = cur.fetchone()
+                    cur.execute("SELECT plant_id FROM plants WHERE plant_name = %s", (request.form.get("plant_name_add_friend_b"),))
+                    plant_b_id = cur.fetchone()
+    
+                    cur.execute(
+                        "INSERT INTO companion_friends (plant_id_a, plant_id_b) VALUES (%s, %s)",
+                        (plant_a_id["plant_id"], plant_b_id["plant_id"])
+                    )
+                    db.commit()
+
+                    return redirect("/admin")
+    
+                if request.form.get("remove_companion_friends_button"):
+                    if not request.form.get("plant_name_remove_friend_a"):
+                        return error("Must provide plant A name.", 400)
+                    elif not request.form.get("plant_name_remove_friend_b"):
+                        return error("Must provide plant B name.", 400)
+    
+                    if not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_remove_friend_a")) or not request.form.get("plant_name_remove_friend_a").islower():
+                        return error("Plant A name must be lowercase and alphabetical.", 400)
+                    elif not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_remove_friend_b")) or not request.form.get("plant_name_remove_friend_b").islower():
+                        return error("Plant B name must be lowercase and alphabetical.", 400)
+    
+                    cur.execute("SELECT plant_id FROM plants WHERE plant_name = %s", (request.form.get("plant_name_remove_friend_a"),))
+                    plant_a_id = cur.fetchone()
+
+                    cur.execute("SELECT plant_id FROM plants WHERE plant_name = %s", (request.form.get("plant_name_remove_friend_b"),))
+                    plant_b_id = cur.fetchone()
+
+                    cur.execute("SELECT * FROM companion_friends")
+                    companion_friends = cur.fetchall()
+                    
+                    are_plants_a_and_b_friends = False
+    
+                    for i in range(len(companion_friends)):
+                        if companion_friends[i]["plant_id_a"] == plant_a_id[0]["plant_id"]:
+                            if companion_friends[i]["plant_id_b"] == plant_b_id[0]["plant_id"]:
+                                are_plants_a_and_b_friends = True
+                        if companion_friends[i]["plant_id_b"] == plant_a_id[0]["plant_id"]:
+                            if companion_friends[i]["plant_id_a"] == plant_b_id[0]["plant_id"]:
+                                are_plants_a_and_b_friends = True
+    
+                    if not are_plants_a_and_b_friends:
+                        return error("Plants A and B are not friends.", 400)
+    
+                    cur.execute("DELETE FROM companion_friends WHERE plant_id_a = %s AND plant_id_b = %s", (plant_a_id[0]["plant_id"], plant_b_id[0]["plant_id"]))
+                    cur.execute("DELETE FROM companion_friends WHERE plant_id_a = %s AND plant_id_b = %s", (plant_b_id[0]["plant_id"], plant_a_id[0]["plant_id"]))   
+                    db.commit()
+                  
+                    return redirect("/admin")
+    
+                if request.form.get("add_companion_enemies_button"):
+                    if not request.form.get("plant_name_add_enemy_a"):
+                        return error("Must provide plant A name.", 400)
+                    elif not request.form.get("plant_name_add_enemy_b"):
+                        return error("Must provide plant B name.", 400)
+    
+                    if not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_add_enemy_a")) or not request.form.get("plant_name_add_enemy_a").islower():
+                        return error("Plant A name must be lowercase and alphabetical.", 400)
+                    elif not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_add_enemy_b")) or not request.form.get("plant_name_add_enemy_b").islower():
+                        return error("Plant B name must be lowercase and alphabetical.", 400)
+    --
+                    plant_names = db.execute("SELECT plant_name from plants")
+                    
+                    freetext_plant_names_from_user = db.execute("SELECT plant_name FROM freetext_plants WHERE user_id = ?", int(session["user_id"]))
+    
+                    is_plant_a_in_db = False
+                    is_plant_b_in_db = False
+                    for i in range(len(plant_names)):
+                        if plant_names[i]["plant_name"] == request.form.get("plant_name_add_enemy_a"):
+                            is_plant_a_in_db = True
+                        if plant_names[i]["plant_name"] == request.form.get("plant_name_add_enemy_b"):
+                            is_plant_b_in_db = True
+    
+                    for i in range(len(freetext_plant_names_from_user)):
+                        if freetext_plant_names_from_user[i]["plant_name"] == request.form.get("plant_name_add_enemy_a"):
+                            is_plant_a_in_db = True
+                        if freetext_plant_names_from_user[i]["plant_name"] == request.form.get("plant_name_add_enemy_b"):
+                            is_plant_b_in_db = True
+    
+                    if not is_plant_a_in_db:
+                        return error("Plant A name not found. Consider adding as freetext before trying again.", 400)
+                    if not is_plant_b_in_db:
+                        return error("Plant B name not found. Consider adding as freetext before trying again.", 400)
+    
+                    plant_a_id = db.execute("SELECT plant_id FROM plants WHERE plant_name = ?", request.form.get("plant_name_add_enemy_a"))
+                    plant_b_id = db.execute("SELECT plant_id FROM plants WHERE plant_name = ?", request.form.get("plant_name_add_enemy_b"))
+    
+                    db.execute("INSERT INTO companion_enemies (plant_id_a, plant_id_b) VALUES (?, ?)", plant_a_id[0]["plant_id"], plant_b_id[0]["plant_id"])
+                    db.commit()
+
+                  
+                    return redirect("/admin")
+    
+                if request.form.get("remove_companion_enemies_button"):
+                    if not request.form.get("plant_name_remove_enemy_a"):
+                        return error("Must provide plant A name.", 400)
+                    elif not request.form.get("plant_name_remove_enemy_b"):
+                        return error("Must provide plant B name.", 400)
+    
+                    if not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_remove_enemy_a")) or not request.form.get("plant_name_remove_enemy_a").islower():
+                        return error("Plant A name must be lowercase and alphabetical.", 400)
+                    elif not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_remove_enemy_b")) or not request.form.get("plant_name_remove_enemy_b").islower():
+                        return error("Plant B name must be lowercase and alphabetical.", 400)
+    
+                    plant_a_id = db.execute("SELECT plant_id FROM plants WHERE plant_name = ?", request.form.get("plant_name_remove_enemy_a"))
+                    plant_b_id = db.execute("SELECT plant_id FROM plants WHERE plant_name = ?", request.form.get("plant_name_remove_enemy_b"))
+    
+                    companion_enemies = db.execute("SELECT * FROM companion_enemies")
+    
+                    are_plants_a_and_b_enemies = False
+    
+                    for i in range(len(companion_friends)):
+                        if companion_enemies[i]["plant_id_a"] == plant_a_id[0]["plant_id"]:
+                            if companion_enemies[i]["plant_id_b"] == plant_b_id[0]["plant_id"]:
+                                are_plants_a_and_b_friends = True
+                        if companion_enemies[i]["plant_id_b"] == plant_a_id[0]["plant_id"]:
+                            if companion_enemies[i]["plant_id_a"] == plant_b_id[0]["plant_id"]:
+                                are_plants_a_and_b_enemies = True
+    
+                    if not are_plants_a_and_b_enemies:
+                        return error("Plants A and B are not enemies.", 400)
+    
+                    db.execute("DELETE FROM companion_enemies WHERE plant_id_a = ? AND plant_id_b = ?", plant_a_id[0]["plant_id"], plant_b_id[0]["plant_id"])
+                    db.execute("DELETE FROM companion_enemies WHERE plant_id_a = ? AND plant_id_b = ?", plant_b_id[0]["plant_id"], plant_a_id[0]["plant_id"])
+    
+                    db.commit()
+
+                  
+                    return redirect("/admin")
+    
+            else:
+                return render_template("admin.html", admin_id=admin_id)
+    
+        else:
+            return error("You are not an admin.", 401)
 
 
 # @app.route("/change_password", methods=["GET", "POST"])
@@ -1034,36 +1092,36 @@ def logout():
     return redirect("/")
 
 
-# @app.route("/register", methods=["GET", "POST"])
-# def register():
-#     session.clear()
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    session.clear()
+  
+    if request.method == "POST":
+        if not request.form.get("username"):
+            return error("Must provide username.", 400)
+        elif not request.form.get("password"):
+            return error("Must provide password.", 400)
+        elif not request.form.get("confirmation"):
+            return error("Must provide password confirmation.", 400)
 
-#     if request.method == "POST":
-#         if not request.form.get("username"):
-#             return error("Must provide username.", 400)
-#         elif not request.form.get("password"):
-#             return error("Must provide password.", 400)
-#         elif not request.form.get("confirmation"):
-#             return error("Must provide password confirmation.", 400)
-
-#         rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
-
-#         if len(rows) != 0:
-#             return error("Username already taken.", 400)
-#         elif request.form.get("password") != request.form.get("confirmation"):
-#             return error("Passwords must match.", 400)
-
-#         hash_password = generate_password_hash(request.form.get("password"))
-
-#         db.execute("INSERT INTO users (username, hash_password) VALUES (?, ?)", request.form.get("username"), hash_password)
-        
-#         db.commit()
-#         cur.close() 
+        with db.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+            cur.execute("SELECT * FROM users WHERE username = %s", (request.form.get("username"),))
+            rows = cur.fetchall()
+  
+            if len(rows) != 0:
+                return error("Username already taken.", 400)
+            elif request.form.get("password") != request.form.get("confirmation"):
+                return error("Passwords must match.", 400)
+    
+            hash_password = generate_password_hash(request.form.get("password"))
+    
+            cur.execute("INSERT INTO users (username, hash_password) VALUES (%s, %s)", (request.form.get("username"), hash_password))
+            db.commit()
       
-#         return redirect("/login")
+        return redirect("/login")
 
-#     else:
-#         return render_template("register.html")
+    else:
+        return render_template("register.html")
 
 @app.route("/weather", methods=["GET", "POST"])
 @login_required
