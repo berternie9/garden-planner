@@ -20,45 +20,44 @@ from retry_requests import retry
 
 app = Flask(__name__)
 
-# app.config["SESSION_PERMANENT"] = False
-# app.config["SESSION_TYPE"] = "filesystem"
-# Session(app)
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
-# db = psycopg2.connect(host=os.environ['DB_HOST'], 
-#                       port=int(os.environ['DB_PORT']),
-#                       database=os.environ['DB_NAME'],
-#                       user=os.environ['DB_USER'],       
-#                       password=os.environ['DB_PASSWORD'])
+db = psycopg2.connect(host=os.environ['DB_HOST'], 
+                      port=int(os.environ['DB_PORT']),
+                      database=os.environ['DB_NAME'],
+                      user=os.environ['DB_USER'],       
+                      password=os.environ['DB_PASSWORD'])
                      
 if __name__ == "__main__":
-  app.run()
-    # port = int(os.environ.get("PORT", 10000))
-    # app.run(host="0.0.0.0", port=port)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
    
-# @app.after_request
-# def after_request(response):
-#     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-#     response.headers["Expires"] = 0
-#     response.headers["Pragma"] = "no-cache"
-#     return response
+@app.after_request
+def after_request(response):
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Expires"] = 0
+    response.headers["Pragma"] = "no-cache"
+    return response
 
-# def error(message, code):
-#     final_message = "Error " + str(code) + ": " +  message
-#     return render_template("error.html", final_message=final_message, code=code)
+def error(message, code):
+    final_message = "Error " + str(code) + ": " +  message
+    return render_template("error.html", final_message=final_message, code=code)
 
-# def login_required(f):
-#     @wraps(f)
-#     def decorated_function(*args, **kwargs):
-#         if session.get("user_id") is None:
-#             return redirect("/login")
-#         return f(*args, **kwargs)
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("user_id") is None:
+            return redirect("/login")
+        return f(*args, **kwargs)
 
-#     return decorated_function
+    return decorated_function
 
 @app.route("/", methods=["GET", "POST"])
 # @login_required
 def index():
-  return "Test"
+  return render_template("index.html")
   
     # with db.cursor() as cur:
     #   cur.execute("SELECT * FROM users WHERE username = %s", ('admin',))
@@ -70,8 +69,7 @@ def index():
     #   else:
     #       admin_id = None
 
-      # return "Test"
-    # return render_template("index.html")
+  
   
 
 #       if request.method == "POST":
