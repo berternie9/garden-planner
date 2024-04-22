@@ -878,8 +878,9 @@ def admin():
                     cur.execute("SELECT plant_name from plants")
                     plant_names = cur.fetchall()
 
-#                
-                    freetext_plant_names_from_user = db.execute("SELECT plant_name FROM freetext_plants WHERE user_id = ?", int(session["user_id"]))
+                  
+                    cur.execute("SELECT plant_name FROM freetext_plants WHERE user_id = %s", (int(session["user_id"]),))
+                    freetext_plant_names_from_user = cur.fetchall()
     
                     is_plant_a_in_db = False
                     is_plant_b_in_db = False
@@ -900,13 +901,15 @@ def admin():
                     if not is_plant_b_in_db:
                         return error("Plant B name not found. Consider adding as freetext before trying again.", 400)
     
-                    plant_a_id = db.execute("SELECT plant_id FROM plants WHERE plant_name = ?", request.form.get("plant_name_add_enemy_a"))
-                    plant_b_id = db.execute("SELECT plant_id FROM plants WHERE plant_name = ?", request.form.get("plant_name_add_enemy_b"))
-    
-                    db.execute("INSERT INTO companion_enemies (plant_id_a, plant_id_b) VALUES (?, ?)", plant_a_id[0]["plant_id"], plant_b_id[0]["plant_id"])
+                    cur.execute("SELECT plant_id FROM plants WHERE plant_name = %s", (request.form.get("plant_name_add_enemy_a"),))
+                    plant_a_id = cur.fetchall() 
+
+                    cur.execute("SELECT plant_id FROM plants WHERE plant_name = %s", (request.form.get("plant_name_add_enemy_b"),))
+                    plant_b_id = cur.fetchall()
+
+                    cur.execute("INSERT INTO companion_enemies (plant_id_a, plant_id_b) VALUES (%s, %s)", (plant_a_id[0]["plant_id"], plant_b_id[0]["plant_id"]))
                     db.commit()
 
-                  
                     return redirect("/admin")
     
                 if request.form.get("remove_companion_enemies_button"):
@@ -920,10 +923,14 @@ def admin():
                     elif not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_remove_enemy_b")) or not request.form.get("plant_name_remove_enemy_b").islower():
                         return error("Plant B name must be lowercase and alphabetical.", 400)
     
-                    plant_a_id = db.execute("SELECT plant_id FROM plants WHERE plant_name = ?", request.form.get("plant_name_remove_enemy_a"))
-                    plant_b_id = db.execute("SELECT plant_id FROM plants WHERE plant_name = ?", request.form.get("plant_name_remove_enemy_b"))
-    
-                    companion_enemies = db.execute("SELECT * FROM companion_enemies")
+                    cur.execute("SELECT plant_id FROM plants WHERE plant_name = %s", (request.form.get("plant_name_remove_enemy_a"),))
+                    plant_a_id = cur.fetchall()
+
+                    cur.execute("SELECT plant_id FROM plants WHERE plant_name = ?", (request.form.get("plant_name_remove_enemy_b"),))
+                    plant_b_id = cur.fetchall() 
+
+                    cur.execute("SELECT * FROM companion_enemies")
+                    companion_enemies = cur.fetchall()
     
                     are_plants_a_and_b_enemies = False
     
@@ -938,12 +945,10 @@ def admin():
                     if not are_plants_a_and_b_enemies:
                         return error("Plants A and B are not enemies.", 400)
     
-                    db.execute("DELETE FROM companion_enemies WHERE plant_id_a = ? AND plant_id_b = ?", plant_a_id[0]["plant_id"], plant_b_id[0]["plant_id"])
-                    db.execute("DELETE FROM companion_enemies WHERE plant_id_a = ? AND plant_id_b = ?", plant_b_id[0]["plant_id"], plant_a_id[0]["plant_id"])
-    
+                    cur.execute("DELETE FROM companion_enemies WHERE plant_id_a = ? AND plant_id_b = ?", (plant_a_id[0]["plant_id"], plant_b_id[0]["plant_id"]))
+                    cur.execute("DELETE FROM companion_enemies WHERE plant_id_a = ? AND plant_id_b = ?", (plant_b_id[0]["plant_id"], plant_a_id[0]["plant_id"]))
                     db.commit()
 
-                  
                     return redirect("/admin")
     
             else:
