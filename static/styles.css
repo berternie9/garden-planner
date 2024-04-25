@@ -151,7 +151,7 @@ table
     font-style: normal;
 }
 
-.login-form .register-form {
+.login-form, .register-form {
     padding: 0;
     margin: 3rem;
     text-align: center;
