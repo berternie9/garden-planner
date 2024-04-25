@@ -7,11 +7,9 @@
         <link rel="icon" href="/static/favicon.ico">
         <link href="/static/reset.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
-
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Londrina+Sketch&display=swap" rel="stylesheet">
-
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@100;300;400;900&display=swap" rel="stylesheet">
@@ -32,43 +30,34 @@
 
         <title> Garden Planner: {% block title %}{% endblock %} </title>
     </head>
-
-    <body class="body">
-        <div class="navbar_header">
-            {% if session["user_id"] %}
-            <ul class="navbar_ul">
-                <li class="navbar_li_left"><a class="navbar_link" href="/">{{ username | capitalize }}'s Gardens</a></li>
-                <li class="navbar_li_left"><a class="navbar_link" href="/information">All Plants</a></li>
-                <li class="navbar_li_left"><a class="navbar_link" href="/weather">Weather</a></li>
-            </ul>
-            <ul class="navbar_ul">
-                <li class="navbar_li_right"><a class="navbar_link" href="/change_password">Change Password</a></li>
-                <li class="navbar_li_right"><a class="navbar_link" href="/logout">Log Out</a></li>
-                {% if session["user_id"] == admin_id %}
-                    <li class="navbar_li_right"><a class="navbar_link" href="/admin">Admin</a></li>
-                {% endif %}
-            </ul>
-
-            {% else %}
-                <ul class="navbar_ul">
-                    <li class="navbar_li_left"><a class="navbar_link" href="/login">Log In</a></li>
-                    <li class="navbar_li_left"><a class="navbar_link" href="/register">Register</a></li>
-                </ul>
-            {% endif %}
-        </div>
-
+    <body>
         <header>
-        </header>
+            <div class="navbar_header">
+                {% if session["user_id"] %}
+                <ul class="navbar_ul">
+                    <li class="navbar_li_left"><a class="navbar_link" href="/">{{ username | capitalize }}'s Gardens</a></li>
+                    <li class="navbar_li_left"><a class="navbar_link" href="/information">All Plants</a></li>
+                    <li class="navbar_li_left"><a class="navbar_link" href="/weather">Weather</a></li>
+                </ul>
+                <ul class="navbar_ul">
+                    <li class="navbar_li_right"><a class="navbar_link" href="/change_password">Change Password</a></li>
+                    <li class="navbar_li_right"><a class="navbar_link" href="/logout">Log Out</a></li>
+                    {% if session["user_id"] == admin_id %}
+                        <li class="navbar_li_right"><a class="navbar_link" href="/admin">Admin</a></li>
+                    {% endif %}
+                </ul>
 
+                {% else %}
+                    <ul class="navbar_ul">
+                        <li class="navbar_li_left"><a class="navbar_link" href="/login">Log In</a></li>
+                        <li class="navbar_li_left"><a class="navbar_link" href="/register">Register</a></li>
+                    </ul>
+                {% endif %}
+            </div>
+        </header>
         <main>
             <div class="title">Garden Planner</div>
             {% block main %}{% endblock %}
         </main>
-
-        <footer>
-
-        </footer>
-
     </body>
-
 </html>

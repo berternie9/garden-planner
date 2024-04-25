@@ -25,17 +25,11 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-db = psycopg2.connect(host='***REMOVED***',
-                      port='5432',
-                      database='***REMOVED***',
-                      user='***REMOVED***',       
-                      password='***REMOVED***')
-
-# db = psycopg2.connect(host=os.environ['DB_HOST'], 
-#                       port=int(os.environ['DB_PORT']),
-#                       database=os.environ['DB_NAME'],
-#                       user=os.environ['DB_USER'],       
-#                       password=os.environ['DB_PASSWORD'])
+db = psycopg2.connect(host=os.environ['DB_HOST'], 
+                      port=int(os.environ['DB_PORT']),
+                      database=os.environ['DB_NAME'],
+                      user=os.environ['DB_USER'],       
+                      password=os.environ['DB_PASSWORD'])
                      
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))

@@ -10,39 +10,40 @@
     {% if planted_gardens_from_user %}
         {% for i in range(number_of_gardens_from_user) %}
             <h2> {{ garden_ids_from_user[i]["garden_name"] | capitalize }}</h2>
-                <div class="garden_size">Garden size: {{ garden_ids_from_user[i]["garden_size_metres_squared"] }} m<sup>2</sup></div><br>
-                <table class="yearly_garden_table">
-                    <thead>
-                        <tr>
-                            <th>Month</th>
-                                {% for j in range(total_different_plants_in_garden[i]) %}
-                                <th></th>
-                                {% endfor %}
-                            <th>Space remaining (m<sup>2</sup>)</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for j in range(12) %}
+                <div class="garden_size">Garden size: {{ garden_ids_from_user[i]["garden_size_metres_squared"] }} m<sup>2</sup></div>
+                <div class="yearly-garden-table-wrapper">
+                    <table class="yearly_garden_table">
+                        <thead>
                             <tr>
-                                <td>{{ months_of_year[j] | capitalize }}</td>
-                                    {% for k in range(total_different_plants_in_garden[i]) %}
-                                        {% set filled = namespace(value=0) %}
-                                        {% for l in range(planted_gardens_from_user[i][j] | length) %}
-                                            {% if planted_gardens_from_user[i][j][l]["plant_name"] == all_plant_names_in_garden[i][k] %}
-                                                <td>{{ planted_gardens_from_user[i][j][l]["plant_name"]| capitalize }} ({{ planted_gardens_from_user[i][j][l]["number_of_plants"] }})</td>
-                                                {% set filled.value = 1 %}
+                                <th>Month</th>
+                                    {% for j in range(total_different_plants_in_garden[i]) %}
+                                    <th></th>
+                                    {% endfor %}
+                                <th>Space remaining (m<sup>2</sup>)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for j in range(12) %}
+                                <tr>
+                                    <td>{{ months_of_year[j] | capitalize }}</td>
+                                        {% for k in range(total_different_plants_in_garden[i]) %}
+                                            {% set filled = namespace(value=0) %}
+                                            {% for l in range(planted_gardens_from_user[i][j] | length) %}
+                                                {% if planted_gardens_from_user[i][j][l]["plant_name"] == all_plant_names_in_garden[i][k] %}
+                                                    <td>{{ planted_gardens_from_user[i][j][l]["plant_name"]| capitalize }} ({{ planted_gardens_from_user[i][j][l]["number_of_plants"] }})</td>
+                                                    {% set filled.value = 1 %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if filled.value == 0 %}
+                                                <td></td>
                                             {% endif %}
                                         {% endfor %}
-                                        {% if filled.value == 0 %}
-                                            <td></td>
-                                        {% endif %}
-                                    {% endfor %}
-                                <td>{{ space_remaining_each_month[i][j] | round(2)}}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                                    <td>{{ space_remaining_each_month[i][j] | round(2)}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
         {% endfor %}
     {% endif %}
 
