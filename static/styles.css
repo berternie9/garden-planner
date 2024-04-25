@@ -310,17 +310,17 @@ ul:has(.navbar_li_right) {
     ul:has(.navbar_li_left) {
         flex-direction: column;
         justify-content: flex-start;
+        gap: 8%;
     }
     
     ul:has(.navbar_li_right) {
         flex-direction: column;
         justify-content: right;
         align-items: flex-end;
+        gap: 8%;
     }
 
     .yearly_garden_table {
         font-size: 1rem;
     }
-
-   
 }
