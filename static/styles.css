@@ -256,3 +256,52 @@ a:hover
     font-weight: bold;
 }
 
+@media (max-width: 600px) {
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    h2 {
+        font-size: 1.2rem;
+    }
+
+    h3 {
+        font-size: 1rem;
+    }
+
+    .navbar_header {
+        font-size: 0.7rem;
+        display: flex;
+        flex-direction: row;
+        height: 3.5rem;
+    }
+
+    .navbar_ul:first-child {
+        justify-content: flex-start;
+    }
+
+    .navbar_ul:last-child {
+        justify-content: flex-end;
+    }
+
+    .navbar_header ul li {
+        margin: 4px;
+    }
+
+    .navbar_header ul li a {
+        padding: 4px;
+    }
+    
+    .title {
+        font-size: 3rem;
+    }
+
+    .garden_size {
+        font-size: 0.7rem;
+    }
+
+    .yearly_garden_table {
+        font-size: 1rem;
+    }
+}

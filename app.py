@@ -25,11 +25,17 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-db = psycopg2.connect(host=os.environ['DB_HOST'], 
-                      port=int(os.environ['DB_PORT']),
-                      database=os.environ['DB_NAME'],
-                      user=os.environ['DB_USER'],       
-                      password=os.environ['DB_PASSWORD'])
+db = psycopg2.connect(host='***REMOVED***',
+                      port='5432',
+                      database='***REMOVED***',
+                      user='***REMOVED***',       
+                      password='***REMOVED***')
+
+# db = psycopg2.connect(host=os.environ['DB_HOST'], 
+#                       port=int(os.environ['DB_PORT']),
+#                       database=os.environ['DB_NAME'],
+#                       user=os.environ['DB_USER'],       
+#                       password=os.environ['DB_PASSWORD'])
                      
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
@@ -61,13 +67,14 @@ def index():
     with db.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
         cur.execute("SELECT * FROM users WHERE username = %s", ('admin',))
         admin = cur.fetchall()
-      
+        admin_id = None
+
         if len(admin) == 1:
-            if session["user_id"] == admin[0]["user_id"]:
-                admin_id = admin[0]["user_id"]
-        else:
-            admin_id = None
-  
+            admin_id = admin[0]["user_id"]
+        
+        cur.execute("SELECT * FROM users WHERE user_id = %s", (session["user_id"],))
+        username = cur.fetchall()[0]["username"]
+        
         if request.method == "POST":
             # Add freetext plants or gardens (including require plants) to SQL database, per user input from form in index.html
             if request.form.get("add_freetext_plant_button"):
@@ -179,9 +186,8 @@ def index():
                 if is_plant_in_db == False:
                     return error("Plant name not found.", 400)
     
-                cur.execute("SELECT plant_id FROM freetext_plants WHERE plant_name = %s AND user_id = %s", (request.form.get("plant_name_remove"), int(session["user_id"])))
+                cur.execute("SELECT plant_id FROM freetext_plants WHERE plant_name = %s AND user_id = %s", (request.form.get("plant_name_remove"), int(session["user_id"]),))
                 plant_id = cur.fetchall() 
-  
   
                 for i in range(len(plant_id)):
                   cur.execute("DELETE FROM freetext_plants WHERE plant_id = %s", (plant_id[i]["plant_id"],))
@@ -217,7 +223,7 @@ def index():
                     if garden_names_user[i]["garden_name"] == request.form.get("add_new_garden_name"):
                         return error("You already have a garden with that name.", 400)
   
-                cur.execute("INSERT INTO gardens (garden_name, garden_size_metres_squared, user_id) VALUES (%s, %s, %s)", (request.form.get("add_new_garden_name"), request.form.get("add_new_garden_size"), int(session["user_id"])))
+                cur.execute("INSERT INTO gardens (garden_name, garden_size_metres_squared, user_id) VALUES (%s, %s, %s)", (request.form.get("add_new_garden_name"), request.form.get("add_new_garden_size"), int(session["user_id"]),))
                 db.commit()
               
                 return redirect("/")
@@ -240,7 +246,7 @@ def index():
                 if is_plant_in_db == False:
                     return error("You don't have a garden with that name.", 400)
     
-                cur.execute("SELECT garden_id FROM gardens WHERE garden_name = %s AND user_id = %s", (request.form.get("remove_garden_name"), int(session["user_id"])))
+                cur.execute("SELECT garden_id FROM gardens WHERE garden_name = %s AND user_id = %s", (request.form.get("remove_garden_name"), int(session["user_id"]),))
                 garden_id = cur.fetchall()
   
                 for i in range(len(garden_id)):
@@ -292,7 +298,7 @@ def index():
                     return error("Is the plant freetext? Must select either yes or no.", 400)
                 
                 garden_id = None
-                cur.execute("SELECT garden_id FROM gardens WHERE user_id = %s AND garden_name = %s", (int(session["user_id"]), request.form.get("add_plants_to_garden_garden_name")))
+                cur.execute("SELECT garden_id FROM gardens WHERE user_id = %s AND garden_name = %s", (int(session["user_id"]), request.form.get("add_plants_to_garden_garden_name"),))
                 garden_id = cur.fetchone()["garden_id"]
   
                 if garden_id == None:
@@ -448,9 +454,9 @@ def index():
                         plants_growing_each_month_of_year.append([])
                         space_remaining_each_month[i].append([])
                     for j in range(12):
-                        cur.execute("SELECT plants.plant_name, planted_in_gardens.number_of_plants, planted_in_gardens.months_to_remain_planted, plants.metres_squared_required, plants.perennial_or_annual FROM gardens INNER JOIN planted_in_gardens ON gardens.garden_id = planted_in_gardens.garden_id INNER JOIN plants ON planted_in_gardens.plant_id = plants.plant_id WHERE planted_in_gardens.month_planted = %s AND gardens.garden_id = %s AND gardens.user_id = %s AND planted_in_gardens.freetext = 'no'", (months_of_year[j], int(garden_ids_from_user[i]["garden_id"]), int(session["user_id"])),)
+                        cur.execute("SELECT plants.plant_name, planted_in_gardens.number_of_plants, planted_in_gardens.months_to_remain_planted, plants.metres_squared_required, plants.perennial_or_annual FROM gardens INNER JOIN planted_in_gardens ON gardens.garden_id = planted_in_gardens.garden_id INNER JOIN plants ON planted_in_gardens.plant_id = plants.plant_id WHERE planted_in_gardens.month_planted = %s AND gardens.garden_id = %s AND gardens.user_id = %s AND planted_in_gardens.freetext = 'no'", (months_of_year[j], int(garden_ids_from_user[i]["garden_id"]), int(session["user_id"]),))
                         monthly_plants_nonfreetext = cur.fetchall()
-                        cur.execute("SELECT freetext_plants.plant_name, planted_in_gardens.number_of_plants, planted_in_gardens.months_to_remain_planted, freetext_plants.metres_squared_required, freetext_plants.perennial_or_annual FROM gardens INNER JOIN planted_in_gardens ON gardens.garden_id = planted_in_gardens.garden_id INNER JOIN freetext_plants ON planted_in_gardens.plant_id = freetext_plants.plant_id WHERE planted_in_gardens.month_planted = %s AND gardens.garden_id = %s AND gardens.user_id = %s AND planted_in_gardens.freetext = 'yes'", (months_of_year[j], int(garden_ids_from_user[i]["garden_id"]), int(session["user_id"])),)
+                        cur.execute("SELECT freetext_plants.plant_name, planted_in_gardens.number_of_plants, planted_in_gardens.months_to_remain_planted, freetext_plants.metres_squared_required, freetext_plants.perennial_or_annual FROM gardens INNER JOIN planted_in_gardens ON gardens.garden_id = planted_in_gardens.garden_id INNER JOIN freetext_plants ON planted_in_gardens.plant_id = freetext_plants.plant_id WHERE planted_in_gardens.month_planted = %s AND gardens.garden_id = %s AND gardens.user_id = %s AND planted_in_gardens.freetext = 'yes'", (months_of_year[j], int(garden_ids_from_user[i]["garden_id"]), int(session["user_id"]),))
                         monthly_plants_freetext = cur.fetchall()
             
                         for k in range(len(monthly_plants_nonfreetext)):
@@ -487,7 +493,7 @@ def index():
                             plant_space_required = float(planted_gardens_from_user[i][j][k]["metres_squared_required"]) * float(planted_gardens_from_user[i][j][k]["number_of_plants"])
                             space_remaining_each_month[i][j] -= plant_space_required
     
-            return render_template("index.html", space_remaining_each_month=space_remaining_each_month, all_plant_names_in_garden=all_plant_names_in_garden, total_different_plants_in_garden=total_different_plants_in_garden, garden_ids_from_user=garden_ids_from_user, planted_gardens_from_user=planted_gardens_from_user, number_of_gardens_from_user=number_of_gardens_from_user, admin_id=admin_id, months_of_year=months_of_year)
+            return render_template("index.html", space_remaining_each_month=space_remaining_each_month, all_plant_names_in_garden=all_plant_names_in_garden, total_different_plants_in_garden=total_different_plants_in_garden, garden_ids_from_user=garden_ids_from_user, planted_gardens_from_user=planted_gardens_from_user, number_of_gardens_from_user=number_of_gardens_from_user, admin_id=admin_id, username=username, months_of_year=months_of_year)
   
 
 @app.route("/admin", methods=["GET", "POST"])
@@ -496,8 +502,12 @@ def admin():
     with db.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
         cur.execute("SELECT * FROM users WHERE username = %s", ('admin',))
         admin = cur.fetchall()
-        if len(admin) == 1 and session["user_id"] == admin[0]["user_id"]:
-            admin_id = admin[0]["user_id"]
+        admin_id = admin[0]["user_id"]
+
+        cur.execute("SELECT * FROM users WHERE user_id = %s", (session["user_id"],))
+        username = cur.fetchall()[0]["username"]
+
+        if len(admin) == 1 and session["user_id"] == admin_id:
             if request.method == "POST":
                 # Insert new data from admin page into database
     
@@ -629,7 +639,7 @@ def admin():
                         ON plants.plant_id = freetext_plants_users.plant_id 
                         WHERE plants.freetext = %s AND freetext_plants_users.user_id = %s
                         """,
-                        ('yes', int(session["user_id"]))  
+                        ('yes', int(session["user_id"]),)  
                     )
                     freetext_plant_names_from_user = cur.fetchall()
 
@@ -950,10 +960,8 @@ def admin():
                     db.commit()
 
                     return redirect("/admin")
-    
             else:
-                return render_template("admin.html", admin_id=admin_id)
-    
+                return render_template("admin.html", admin_id=admin_id, username=username)
         else:
             return error("You are not an admin.", 401)
 
@@ -962,16 +970,18 @@ def admin():
 @login_required
 def change_password():
     with db.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
-        cur.execute("SELECT * FROM users WHERE username = 'admin'");
+        cur.execute("SELECT * FROM users WHERE username = 'admin'")
         admin = cur.fetchall()
-    
-        if len(admin) == 1 and session["user_id"] == admin[0]["user_id"]:
+
+        admin_id = None
+        if len(admin) == 1:
             admin_id = admin[0]["user_id"]
+        
+        cur.execute("SELECT * FROM users WHERE user_id = %s", (session["user_id"],))
+        username = cur.fetchall()[0]["username"]
     
         if request.method == "POST":
-            if not request.form.get("username"):
-                return error("Must provide username.", 400)
-            elif not request.form.get("new_password"):
+            if not request.form.get("new_password"):
                 return error("Must provide new password.", 400)
             elif not request.form.get("confirmation"):
                 return error("Must provide password confirmation.", 400)
@@ -981,24 +991,25 @@ def change_password():
     
             hash_password = generate_password_hash(request.form.get("new_password"))
     
-            cur.execute("UPDATE users SET hash_password = %s WHERE username = %s", (hash_password, request.form.get("username")))
+            cur.execute("UPDATE users SET hash_password = %s WHERE username = %s", (hash_password, username))
             db.commit()
           
             return redirect("/")
     
         else:
-            return render_template("change_password.html", admin_id=admin_id)
+            return render_template("change_password.html", admin_id=admin_id, username=username)
 
 
 @app.route("/information")
 @login_required
 def information():
      with db.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
-        cur.execute("SELECT * FROM users WHERE username = 'admin'");
+        cur.execute("SELECT * FROM users WHERE username = 'admin'")
         admin = cur.fetchall()
-         
-        if len(admin) == 1 and session["user_id"] == admin[0]["user_id"]:
-            admin_id = admin[0]["user_id"]
+        admin_id = admin[0]["user_id"]
+
+        cur.execute("SELECT * FROM users WHERE user_id = %s", (session["user_id"],))
+        username = cur.fetchall()[0]["username"]
 
         cur.execute("SELECT plant_name, duration_to_maturity_months, plant_spacing_metres, metres_squared_required, perennial_or_annual, january, february, march, april, may, june, july, august, september, october, november, december FROM plants ORDER BY plant_name")
         plants = cur.fetchall()
@@ -1075,13 +1086,13 @@ def information():
     
             companion_enemies = companion_enemies_buffer
     
-        return render_template("information.html", plants=plants, freetext_plants_from_user=freetext_plants_from_user, companion_friends=companion_friends, companion_enemies=companion_enemies, admin_id=admin_id)
+        return render_template("information.html", plants=plants, freetext_plants_from_user=freetext_plants_from_user, companion_friends=companion_friends, companion_enemies=companion_enemies, admin_id=admin_id, username=username)
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     session.clear()
-
+    
     if request.method == "POST":
         if not request.form.get("username"):
             return error("Must provide username.", 400)
@@ -1096,7 +1107,7 @@ def login():
             return error("Invalid username and/or password", 400)
 
         session["user_id"] = rows[0]["user_id"]
- 
+
         return redirect("/")
 
     else:
@@ -1143,6 +1154,14 @@ def register():
 @app.route("/weather", methods=["GET", "POST"])
 @login_required
 def weather():
+    with db.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+        cur.execute("SELECT * FROM users WHERE user_id = %s", (session["user_id"],))
+        username = cur.fetchall()[0]["username"]
+   
+        cur.execute("SELECT * FROM users WHERE username = 'admin'")
+        admin = cur.fetchall()
+        admin_id = admin[0]["user_id"]
+
     # Setup the Open-Meteo API client with cache and retry on error
     cache_session = requests_cache.CachedSession('.cache', expire_after = 3600)
     retry_session = retry(cache_session, retries = 5, backoff_factor = 0.2)
@@ -1228,5 +1247,5 @@ def weather():
 
     daily_dataframe = pd.DataFrame(data = daily_data)
 
-    return render_template("weather.html", latitude=latitude, longitude=longitude, freetext_location=freetext_location, daily_dataframe=daily_dataframe)
+    return render_template("weather.html", latitude=latitude, longitude=longitude, freetext_location=freetext_location, daily_dataframe=daily_dataframe, username=username, admin_id=admin_id)
 

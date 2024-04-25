@@ -36,7 +36,7 @@
         <div class="navbar_header">
             {% if session["user_id"] %}
             <ul class="navbar_ul">
-                <li class="navbar_li_left"><a class="navbar_link" href="/">Home</a></li>
+                <li class="navbar_li_left"><a class="navbar_link" href="/">{{ username | capitalize }}'s Gardens</a></li>
                 <li class="navbar_li_left"><a class="navbar_link" href="/information">All Plants</a></li>
                 <li class="navbar_li_left"><a class="navbar_link" href="/weather">Weather</a></li>
             </ul>
