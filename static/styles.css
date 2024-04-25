@@ -153,8 +153,8 @@ table
 
 .login-form, .register-form {
     padding: 0;
-    margin: 3rem;
-    text-align: center;
+    margin: 3rem auto;
+    width: fit-content;
 }
 
 .login-form button, .register-form button {

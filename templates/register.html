@@ -5,10 +5,16 @@
 {% endblock %}
 
 {% block main %}
-    <form action="/register" method="post">
-        <input autocomplete="off" autofocus name="username" placeholder="Username" type="text">
-        <input autocomplete="off" name="password" placeholder="Password" type="password">
-        <input autocomplete="off" name="confirmation" placeholder="Confirm Password" type="password">
+    <form class="register-form" action="/register" method="post">
+        <label class="input_label">Username:
+            <input autocomplete="off" autofocus name="username" placeholder="Username" type="text">
+        </label>
+        <label class="input_label">Password:
+            <input name="password" placeholder="Password" type="password">
+        </label>
+        <label class="input_label">Confirmation:
+            <input autocomplete="off" name="confirmation" placeholder="Confirm Password" type="password">
+        </label>
         <button type="submit">Register</button>
     </form>
 {% endblock %}
