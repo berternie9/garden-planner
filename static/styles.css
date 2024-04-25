@@ -1,50 +1,32 @@
-h1, h2, h3, h4, h5, h6
+a
 {
-    font-family: "Londrina Solid", sans-serif;
-    font-weight: 300;
-    font-style: normal;
-    color: #386694;
-    margin: 5px;
+    color: #38947d;
+    text-decoration: none;
 }
 
-h1
+a:hover
 {
-    font-size: 250%;
+    text-decoration: underline;
 }
 
-h2
+body
 {
-    font-size: 200%;
-}
-
-h3
-{
-    font-size: 150%;
-}
-
-h4
-{
-    font-size: 120%
-}
-
-h5
-{
-    font-size: 110%
-}
-
-h6
-{
-    font-size: 100%;
+    font-family: Arial, sans-serif;
+    background-image: linear-gradient(rgba(255,255,255,.7), rgba(255,255,255,.7)), url("/static/watercolour_fern.png");
+    background-repeat: repeat;
+    background-color: #e6fff2;
+    background-size: 10%;
+    margin: 0;
+    padding: 3vw;
 }
 
 button[type="submit"], button[type="search"], button[type="button"]
 {
-
-    box-sizing: border-box;
     border: 2px solid #ffffff;
     border-radius: 4px;
     color: #ffffff;
-    background-color: #386694;
+    background-color: #61baaf;
+    cursor: pointer;
 }
 
 button[type="submit"], button[type="search"]
@@ -70,16 +52,52 @@ button[type="submit"]:hover, button[type="search"]:hover, button[type="button"]:
     box-shadow: 0 8px 5px 0 rgba(0,0,0,0.15), 0 10px 8px 0 rgba(0,0,0,0.1);
 }
 
+fieldset {
+    width: fit-content;
+}
+
+
+form
+{
+    padding: 0 0 0 1%;
+    font-size: 90%;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+    font-family: "Londrina Solid", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    color: #e06ca6;
+    margin: 5px;
+    margin-left: 10px;
+}
+
+h1
+{
+    font-size: 2.5rem;
+}
+
+h2
+{
+    font-size: 1.8rem;
+}
+
+h3
+{
+    font-size: 1.5rem;
+}
 
 input[type="text"], input[type="number"], input[type="password"]
 {
-    width: 200px;
+    width: 10rem;
     padding: 5px 8px;
-    margin: 8px 0;
+    margin: 8px 2px;
     box-sizing: border-box;
-    border: 2px solid #386694;
+    border: 2px solid #61baaf;
     border-radius: 4px;
     display: inline;
+    background: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5));
 }
 
 th, td, tr
@@ -95,47 +113,28 @@ table
     background-color: rgba(255,255,255,.5)
 }
 
-form
-{
-    padding: 0 0 0 1%;
-    font-size: 90%;
-}
 
-a
-{
-    color: #38947d;
-    text-decoration: none;
-}
-
-a:hover
-{
-    text-decoration: underline;
-}
-
-.table_footnotes
-{
-    padding: 5px 0 0 50px;
-    font-style: italic;
-    border: none;
-}
-
-.body
-{
-    font-family: Arial, sans-serif;
-    background-image: linear-gradient(rgba(255,255,255,.7), rgba(255,255,255,.7)), url("/static/watercolour_fern.png");
-    background-repeat: repeat;
-    background-color: #e6fff2;
-    background-size: 10%;
-    padding: 1%;
-}
 
 .error
 {
-    color: #38947d;
+    color: #e06ca6;
     border: 1px solid #ffffff;
     padding: 5px;
     display: inline;
     font-size: 150%;
+}
+
+.garden_size
+{
+    font-size: 100%;
+    margin-left: 10px;
+    color: #d28bae;
+    font-weight: bold;
+}
+
+.input_label
+{
+    display: block;
 }
 
 .londrina-sketch
@@ -152,23 +151,46 @@ a:hover
     font-style: normal;
 }
 
-.input_label
-{
-    display: block;
+.login-form {
+    padding: 0;
+    margin: 3rem;
+    text-align: center;
 }
 
+.login-form button {
+    margin: 1rem auto;
+    background-color: #e06ca6;
+}
 
+.login-form .input_label input {
+    border-color: #e06ca6;
+    color: #5fb1f5;
+    font-weight: bold;
+}
+
+.login-form .input_label {
+    color: #d28bae;
+    font-weight: bold;
+}
+
+.table_footnotes
+{
+    padding: 5px 0 0 50px;
+    font-style: italic;
+    border: none;
+}
 
 .title
 {
     font-family: "Londrina Sketch", sans-serif;
     font-weight: 800;
     font-style: normal;
-    font-size: 700%;
+    font-size: 6rem;
     display: block;
-    color: #386694;
+    color: #d876a7;
+    color: #5fb1f5;
     text-align: center;
-    margin: 5px;
+    margin: 1rem;
 }
 
 .navbar_ul
@@ -180,42 +202,46 @@ a:hover
 
 .navbar_header
 {
-    line-height: 1;
-    block-size: 40px;
+    font-size: 1rem;
+    height: 3.5rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 }
 
 .navbar_link
 {
     display: block;
-    padding: 8px;
-    background-color: rgba(107, 199, 176, 0.7);
     color: #ffffff;
-    font-size: 80%;
-    font-weight: 600;
+    font-size: 0.8rem;
+    font-weight: bold;
 }
 
-.navbar_li_left
-{
-    float: left;
+.navbar_li_left, .navbar_li_right {
+    background-color: rgba(255, 117, 168, 0.4);
     border: 2px solid #ffffff;
-    border-width: 2px;
     border-radius: 4px;
-    margin: 5px;
+    padding: 0.3rem;
+    width: fit-content;
+    height: fit-content;
 }
 
-.navbar_li_right
-{
-    float: right;
-    border: 2px solid #ffffff;
-    border-radius: 4px;
-    margin: 5px;
+ul:has(.navbar_li_left) {
+    display: flex;
+    justify-content: flex-start;
+    gap: 4%;
+}
+
+ul:has(.navbar_li_right) {
+    display: flex;
+    justify-content: flex-end;
+    gap: 4%;
 }
 
 .yearly_garden_table, .weather
 {
     margin: 10px 10px 20px 10px;
     border: 3px solid #ffffff;
-    border-radius: 10px;
+    border-radius: 20px;
     font-family: "Londrina Solid", sans-serif;
     font-weight: 300;
     font-style: normal;
@@ -248,13 +274,6 @@ a:hover
     width: 80px;
 }
 
-.garden_size
-{
-    font-size: 100%;
-    margin: 0 0 0 10px;
-    color: #386694;
-    font-weight: bold;
-}
 
 @media (max-width: 600px) {
     
@@ -271,37 +290,37 @@ a:hover
     }
 
     .navbar_header {
-        font-size: 0.7rem;
-        display: flex;
-        flex-direction: row;
-        height: 3.5rem;
+        height: 2.7rem;
     }
 
-    .navbar_ul:first-child {
-        justify-content: flex-start;
-    }
-
-    .navbar_ul:last-child {
-        justify-content: flex-end;
-    }
-
-    .navbar_header ul li {
-        margin: 4px;
-    }
-
-    .navbar_header ul li a {
-        padding: 4px;
+    .navbar_link{
+        font-size: 0.6rem;
     }
     
     .title {
         font-size: 3rem;
+        width: 10rem;
+        margin: 0 auto;
     }
 
     .garden_size {
         font-size: 0.7rem;
     }
 
+    ul:has(.navbar_li_left) {
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+    
+    ul:has(.navbar_li_right) {
+        flex-direction: column;
+        justify-content: right;
+        align-items: flex-end;
+    }
+
     .yearly_garden_table {
         font-size: 1rem;
     }
+
+   
 }
