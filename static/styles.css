@@ -151,24 +151,24 @@ table
     font-style: normal;
 }
 
-.login-form {
+.login-form .register-form {
     padding: 0;
     margin: 3rem;
     text-align: center;
 }
 
-.login-form button {
+.login-form button, .register-form button {
     margin: 1rem auto;
     background-color: #e06ca6;
 }
 
-.login-form .input_label input {
+.login-form .input_label input, .register-form .input_label input {
     border-color: #e06ca6;
     color: #5fb1f5;
     font-weight: bold;
 }
 
-.login-form .input_label {
+.login-form .input_label, .register-form .input_label {
     color: #d28bae;
     font-weight: bold;
 }
@@ -187,7 +187,6 @@ table
     font-style: normal;
     font-size: 6rem;
     display: block;
-    color: #d876a7;
     color: #5fb1f5;
     text-align: center;
     margin: 1rem;
