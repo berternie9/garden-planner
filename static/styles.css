@@ -18,6 +18,7 @@ body
     background-size: 10%;
     margin: 0;
     padding: 3vw;
+    font-size: 0.9rem;
 }
 
 button[type="submit"], button[type="search"], button[type="button"]
@@ -92,8 +93,7 @@ input[type="text"], input[type="number"], input[type="password"]
 {
     width: 10rem;
     padding: 5px 8px;
-    margin: 8px 2px;
-    box-sizing: border-box;
+    margin: 8px;
     border: 2px solid #61baaf;
     border-radius: 4px;
     display: inline;
@@ -224,6 +224,11 @@ table
     height: fit-content;
 }
 
+.table-wrapper {
+    overflow-x: auto;
+    margin: 0.5rem;
+}
+
 ul:has(.navbar_li_left) {
     display: flex;
     justify-content: flex-start;
@@ -273,10 +278,6 @@ ul:has(.navbar_li_right) {
     width: 80px;
 }
 
-.yearly-garden-table-wrapper {
-    overflow-x: auto;
-    margin: 0.5rem;
-}
 
 @media (max-width: 600px) {
     
@@ -290,6 +291,11 @@ ul:has(.navbar_li_right) {
 
     h3 {
         font-size: 1rem;
+    }
+
+    input[type="text"], input[type="number"], input[type="password"]
+    {
+        display: block;
     }
 
     .navbar_header {
