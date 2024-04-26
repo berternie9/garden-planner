@@ -26,212 +26,202 @@
                             {% for j in range(12) %}
                                 <tr>
                                     <td>{{ months_of_year[j] | capitalize }}</td>
-                                        {% for k in range(total_different_plants_in_garden[i]) %}
-                                            {% set filled = namespace(value=0) %}
-                                            {% for l in range(planted_gardens_from_user[i][j] | length) %}
-                                                {% if planted_gardens_from_user[i][j][l]["plant_name"] == all_plant_names_in_garden[i][k] %}
-                                                    <td>{{ planted_gardens_from_user[i][j][l]["plant_name"]| capitalize }} ({{ planted_gardens_from_user[i][j][l]["number_of_plants"] }})</td>
-                                                    {% set filled.value = 1 %}
-                                                {% endif %}
-                                            {% endfor %}
-                                            {% if filled.value == 0 %}
-                                                <td></td>
-                                            {% endif %}
-                                        {% endfor %}
+                                    {% for k in range(total_different_plants_in_garden[i]) %}
+                                    {% set filled = namespace(value=0) %}
+                                    {% for l in range(planted_gardens_from_user[i][j] | length) %}
+                                    {% if planted_gardens_from_user[i][j][l]["plant_name"] == all_plant_names_in_garden[i][k] %}
+                                    <td>{{ planted_gardens_from_user[i][j][l]["plant_name"]| capitalize }} ({{ planted_gardens_from_user[i][j][l]["number_of_plants"] }})</td>
+                                    {% set filled.value = 1 %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if filled.value == 0 %}
+                                    <td></td>
+                                    {% endif %}
+                                    {% endfor %}
                                     <td>{{ space_remaining_each_month[i][j] | round(2)}}</td>
                                 </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-        {% endfor %}
-    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    
+                    <h1>Add new gardens or plants</h1>
+                        <h2>Add Plants To Your Garden <span><button type="button" id="hide_show_add_plants_to_garden">&#9660</button></span></h2>
+                        <form id="add_plants_to_garden_form" action="/" method="post">
+                            <label class="input_label">Garden name:
+                                <input autocomplete="off" name="add_plants_to_garden_garden_name" placeholder="Garden name" type="text" pattern="[a-zA-Z\s]{1,}" required>
+                            </label>
+                            <label class="input_label">Plant name:
+                                <input autocomplete="off" name="add_plants_to_garden_plant_name" placeholder="Plant name" type="text" pattern="[a-zA-Z\s]{1,}" required>
+                            </label>
+                            <label class="input_label">Number of plants:
+                                <input autocomplete="off" name="add_plants_to_garden_number_of_plants" placeholder="Number of plants" type="number" step="1" min="1" required>
+                            </label>
+                            <fieldset>
+                                <legend>Month planted (from seed):</legend>
+                                <div>
+                                    <input name="add_plants_to_garden_month_planted" type="radio" value="january"><label>January</label>
+                                </div>
+                                <div>
+                                    <input name="add_plants_to_garden_month_planted" type="radio" value="february"><label>February</label>
+                                </div>
+                                <div>
+                                    <input name="add_plants_to_garden_month_planted" type="radio" value="march"><label>March</label>
+                                </div>
+                                <div>
+                                    <input name="add_plants_to_garden_month_planted" type="radio" value="april"><label>April</label>
+                                </div>
+                                <div>
+                                    <input name="add_plants_to_garden_month_planted" type="radio" value="may"><label>May</label>
+                                </div>
+                                <div>
+                                    <input name="add_plants_to_garden_month_planted" type="radio" value="june"><label>June</label>
+                                </div>
+                                <div>
+                                    <input name="add_plants_to_garden_month_planted" type="radio" value="july"><label>July</label>
+                                </div>
+                                <div>
+                                    <input name="add_plants_to_garden_month_planted" type="radio" value="august"><label>August</label>
+                                </div>
+                                <div>
+                                    <input name="add_plants_to_garden_month_planted" type="radio" value="september"><label>September</label>
+                                </div>
+                                <div>
+                                    <input name="add_plants_to_garden_month_planted" type="radio" value="october"><label>October</label>
+                                </div>
+                                <div>
+                                    <input name="add_plants_to_garden_month_planted" type="radio" value="november"><label>November</label>
+                                </div>
+                                <div>
+                                    <input name="add_plants_to_garden_month_planted" type="radio" value="december"><label>December</label>
+                                </div>
+                            </fieldset>
+                            <label class="input_label">Months to remain planted:
+                                <input autocomplete="off" name="add_plants_to_garden_months_to_remain_planted" placeholder="Months to remain planted" type="number" step="1" min="1" required>
+                            </label>
+                            <fieldset>
+                                <legend>Is this plant freetext?</legend>
+                                <div>
+                                    <input name="add_plants_to_garden_freetext" type="radio" value="yes"><label>Yes</label>
+                                </div>
+                                <div>
+                                    <input name="add_plants_to_garden_freetext" type="radio" value="no"><label>No</label>
+                                </div>
+                            </fieldset>
+                            <button type="submit" name="add_plants_to_garden_button" value="yes">Add New Plant</button>
+                        </form>
+                    
+                        <h2>Remove Plants From Your Garden <span><button type="button" id="hide_show_remove_plants_from_garden">&#9660</button></span></h2>
+                        <form id="remove_plants_from_garden_form" action="/" method="post">
+                            <label class="input_label">Garden name:
+                                <input autocomplete="off" name="remove_plants_from_garden_garden_name" placeholder="Garden name" type="text" pattern="[a-zA-Z\s]{1,}" required>
+                            </label>
+                            <label class="input_label">Plant name:
+                                <input autocomplete="off" name="remove_plants_from_garden_plant_name" placeholder="Plant name" type="text" pattern="[a-zA-Z\s]{1,}" required>
+                            </label>
+                            <fieldset>
+                                <legend>Is this plant freetext?</legend>
+                                <div>
+                                    <input name="remove_plants_from_garden_freetext" type="radio" value="yes"><label>Yes</label>
+                                </div>
+                                <div>
+                                    <input name="remove_plants_from_garden_freetext" type="radio" value="no"><label>No</label>
+                                </div>
+                            </fieldset>
+                            <button type="submit" name="remove_plants_from_garden_button" value="yes">Remove Plant</button>
+                        </form>
+                        
+                        <h2>Add Freetext Plant <span><button type="button" id="hide_show_add_freetext_plant">&#9660</button></span></h2>
+                        <form id="add_freetext_plant_form" action="/" method="post">
+                            <label class="input_label">Plant name:
+                                <input autocomplete="off" name="plant_name_add" placeholder="Plant name" type="text" pattern="[a-zA-Z\s]{1,}" required>
+                            </label>
+                            <label class="input_label">Duration to maturity (months):
+                                <input autocomplete="off" name="duration_to_maturity_months_add" placeholder="Duration to maturity (months)" type="number" step="any" min="0" required>
+                            </label>
+                            <label class="input_label">Spacing (metres):
+                                <input autocomplete="off" name="plant_spacing_metres_add" placeholder="Spacing (metres)" type="number" step="any" min="0" required>
+                            </label>
+                            <br>
+                            <fieldset>
+                                <legend>Perennial or annual:</legend>
+                                <div>
+                                    <input name="perennial_or_annual_add" type="radio" value="perennial"><label>Perennial</label>
+                                </div>
+                                <div>
+                                    <input name="perennial_or_annual_add" type="radio" value="annual"><label>Annual</label>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Months to plant (from seed): </legend>
+                                <div class="checkbox">
+                                    <input type="checkbox" name="january_add" value="yes"><label>January</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input type="checkbox" name="february_add" value="yes"><label>February</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input type="checkbox" name="march_add" value="yes"><label>March</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input type="checkbox" name="april_add" value="yes"><label>April</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input type="checkbox" name="may_add" value="yes"><label>May</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input type="checkbox" name="june_add" value="yes"><label>June</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input type="checkbox" name="july_add" value="yes"><label>July</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input type="checkbox" name="august_add" value="yes"><label>August</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input type="checkbox" name="september_add" value="yes"><label>September</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input type="checkbox" name="october_add" value="yes"><label>October</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input type="checkbox" name="november_add" value="yes"><label>November</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input type="checkbox" name="december_add" value="yes"><label>December</label>
+                                </div>
+                            </fieldset>
+                            <button type="submit" name="add_freetext_plant_button" value="yes">Add Plant</button>
+                        </form>
 
-    <h1>Add new gardens or plants</h1>
-        <h2>Add Freetext Plant <span><button type="button" id="hide_show_add_freetext_plant">&#9660</button></span></h2>
-        <form id="add_freetext_plant_form" action="/" method="post">
-            <label class="input_label">Plant name (lowercase):
-                <input autocomplete="off" name="plant_name_add" placeholder="Plant name (lowercase)" type="text" pattern="[a-z\s]{1,}" required>
-            </label>
-            <label class="input_label">Duration to maturity (months):
-                <input autocomplete="off" name="duration_to_maturity_months_add" placeholder="Duration to maturity (months)" type="number" step="any" min="0" required>
-            </label>
-            <label class="input_label">Spacing (metres):
-                <input autocomplete="off" name="plant_spacing_metres_add" placeholder="Spacing (metres)" type="number" step="any" min="0" required>
-            </label>
-            <br>
-            <fieldset>
-                <legend>Perennial or annual:</legend>
-                <div>
-                    <input name="perennial_or_annual_add" type="radio" value="perennial"><label>Perennial</label>
-                </div>
-                <div>
-                    <input name="perennial_or_annual_add" type="radio" value="annual"><label>Annual</label>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend>Months to plant (from seed): </legend>
-                <div class="checkbox">
-                    <input type="checkbox" name="january_add" value="yes"><label>January</label>
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" name="february_add" value="yes"><label>February</label>
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" name="march_add" value="yes"><label>March</label>
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" name="april_add" value="yes"><label>April</label>
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" name="may_add" value="yes"><label>May</label>
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" name="june_add" value="yes"><label>June</label>
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" name="july_add" value="yes"><label>July</label>
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" name="august_add" value="yes"><label>August</label>
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" name="september_add" value="yes"><label>September</label>
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" name="october_add" value="yes"><label>October</label>
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" name="november_add" value="yes"><label>November</label>
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" name="december_add" value="yes"><label>December</label>
-                </div>
-            </fieldset>
-            <button type="submit" name="add_freetext_plant_button" value="yes">Add Plant</button>
-        </form>
+                        <h2>Remove Freetext Plant <span><button type="button" id="hide_show_remove_freetext_plant">&#9660</button></span></h2>
+                        <form id="remove_freetext_plant_form" action="/" method="post">
+                            <label class="input_label">Plant name:
+                                <input autocomplete="off" name="plant_name_remove" placeholder="Plant name" type="text" pattern="[a-zA-Z\s]{1,}" required>
+                            </label>
+                            <button type="submit" name="remove_freetext_plant_button" value="yes">Remove Plant</button>
+                        </form>
 
-        <h2>Remove Freetext Plant <span><button type="button" id="hide_show_remove_freetext_plant">&#9660</button></span></h2>
-        <form id="remove_freetext_plant_form" action="/" method="post">
-            <label class="input_label">Plant name (lowercase):
-                <input autocomplete="off" name="plant_name_remove" placeholder="Plant name (lowercase)" type="text" pattern="[a-z\s]{1,}" required>
-            </label>
-            <button type="submit" name="remove_freetext_plant_button" value="yes">Remove Plant</button>
-        </form>
+                        <h2>Add New Garden <span><button type="button" id="hide_show_add_new_garden">&#9660</button></span></h2>
+                        <form id="add_new_garden_form" action="/" method="post">
+                            <label class="input_label">Garden name:
+                                <input autocomplete="off" name="add_new_garden_name" placeholder="Garden name" type="text" pattern="[a-zA-Z\s]{1,}" required>
+                            </label>
+                            <label class="input_label">Garden size (m<sup>2</sup>):
+                                <input autocomplete="off" name="add_new_garden_size" placeholder="Garden size (m2)" type="number" step="any" min="0" required>
+                            </label>
+                            <button type="submit" name="add_new_garden_button" value="yes">Add New Garden</button>
+                        </form>
 
-        <h2>Add New Garden <span><button type="button" id="hide_show_add_new_garden">&#9660</button></span></h2>
-        <form id="add_new_garden_form" action="/" method="post">
-            <label class="input_label">Garden name (lowercase):
-                <input autocomplete="off" name="add_new_garden_name" placeholder="Garden name (lowercase)" type="text" pattern="[a-z\s]{1,}" required>
-            </label>
-            <label class="input_label">Garden size (m<sup>2</sup>):
-                <input autocomplete="off" name="add_new_garden_size" placeholder="Garden size (meters squared)" type="number" step="any" min="0" required>
-            </label>
-            <button type="submit" name="add_new_garden_button" value="yes">Add New Garden</button>
-        </form>
+                        <h2>Remove Garden <span><button type="button" id="hide_show_remove_garden">&#9660</button></span></h2>
+                        <form id="remove_garden_form" action="/" method="post">
+                            <label class="input_label">Garden name:
+                                <input autocomplete="off" name="remove_garden_name" placeholder="Garden name" type="text" pattern="[a-zA-Z\s]{1,}" required>
+                            </label>
+                            <button type="submit" name="remove_garden_button" value="yes">Remove Garden</button>
+                        </form>
 
-        <h2>Remove Garden <span><button type="button" id="hide_show_remove_garden">&#9660</button></span></h2>
-        <form id="remove_garden_form" action="/" method="post">
-            <label class="input_label">Garden name (lowercase):
-                <input autocomplete="off" name="remove_garden_name" placeholder="Garden name (lowercase)" type="text" pattern="[a-z\s]{1,}" required>
-            </label>
-            <button type="submit" name="remove_garden_button" value="yes">Remove Garden</button>
-        </form>
-
-        <h2>Add Plants To Your Garden <span><button type="button" id="hide_show_add_plants_to_garden">&#9660</button></span></h2>
-        <form id="add_plants_to_garden_form" action="/" method="post">
-            <div>Find the guidelines for each plant's growing conditions <a href="/information" target="_blank">here!</a></div><br>
-            <label class="input_label">Garden name (lowercase):
-                <input autocomplete="off" name="add_plants_to_garden_garden_name" placeholder="Garden name (lowercase)" type="text" pattern="[a-z\s]{1,}" required>
-            </label>
-            <label class="input_label">Plant name (lowercase):
-                <input autocomplete="off" name="add_plants_to_garden_plant_name" placeholder="Plant name (lowercase)" type="text" pattern="[a-z\s]{1,}" required>
-            </label>
-            <label class="input_label">Number of plants:
-                <input autocomplete="off" name="add_plants_to_garden_number_of_plants" placeholder="Number of plants" type="number" step="1" min="1" required>
-            </label>
-            <fieldset>
-                <legend>Month planted (from seed, unless otherwise specified):</legend>
-                <div>
-                    <input name="add_plants_to_garden_month_planted" type="radio" value="january"><label>January</label>
-                </div>
-                <div>
-                    <input name="add_plants_to_garden_month_planted" type="radio" value="february"><label>February</label>
-                </div>
-                <div>
-                    <input name="add_plants_to_garden_month_planted" type="radio" value="march"><label>March</label>
-                </div>
-                <div>
-                    <input name="add_plants_to_garden_month_planted" type="radio" value="april"><label>April</label>
-                </div>
-                <div>
-                    <input name="add_plants_to_garden_month_planted" type="radio" value="may"><label>May</label>
-                </div>
-                <div>
-                    <input name="add_plants_to_garden_month_planted" type="radio" value="june"><label>June</label>
-                </div>
-                <div>
-                    <input name="add_plants_to_garden_month_planted" type="radio" value="july"><label>July</label>
-                </div>
-                <div>
-                    <input name="add_plants_to_garden_month_planted" type="radio" value="august"><label>August</label>
-                </div>
-                <div>
-                    <input name="add_plants_to_garden_month_planted" type="radio" value="september"><label>September</label>
-                </div>
-                <div>
-                    <input name="add_plants_to_garden_month_planted" type="radio" value="october"><label>October</label>
-                </div>
-                <div>
-                    <input name="add_plants_to_garden_month_planted" type="radio" value="november"><label>November</label>
-                </div>
-                <div>
-                    <input name="add_plants_to_garden_month_planted" type="radio" value="december"><label>December</label>
-                </div>
-            </fieldset>
-            <label class="input_label">How many months to remain planted:
-                <input autocomplete="off" name="add_plants_to_garden_months_to_remain_planted" placeholder="How many months to remain planted" type="number" step="1" min="1" required>
-            </label>
-            <fieldset>
-                <legend>Is this plant freetext?</legend>
-                <div>
-                    <input name="add_plants_to_garden_freetext" type="radio" value="yes"><label>Yes</label>
-                </div>
-                <div>
-                    <input name="add_plants_to_garden_freetext" type="radio" value="no"><label>No</label>
-                </div>
-            </fieldset>
-            <button type="submit" name="add_plants_to_garden_button" value="yes">Add New Plant</button>
-        </form>
-
-        <h2>Remove Plants From Your Garden <span><button type="button" id="hide_show_remove_plants_from_garden">&#9660</button></span></h2>
-        <form id="remove_plants_from_garden_form" action="/" method="post">
-            <div>Must match the number of plants/month planted/months to remain planted of the original planting. </div>
-            <label class="input_label">Garden name (lowercase):
-                <input autocomplete="off" name="remove_plants_from_garden_garden_name" placeholder="Garden name (lowercase)" type="text" pattern="[a-z\s]{1,}" required>
-            </label>
-            <label class="input_label">Plant name (lowercase):
-                <input autocomplete="off" name="remove_plants_from_garden_plant_name" placeholder="Plant name (lowercase)" type="text" pattern="[a-z\s]{1,}" required>
-            </label>
-            <fieldset>
-                <legend>Is this plant freetext?</legend>
-                <div>
-                    <input name="remove_plants_from_garden_freetext" type="radio" value="yes"><label>Yes</label>
-                </div>
-                <div>
-                    <input name="remove_plants_from_garden_freetext" type="radio" value="no"><label>No</label>
-                </div>
-            </fieldset>
-            <label class="input_label">Number of plants:
-                <input autocomplete="off" name="remove_plants_from_garden_number_of_plants" placeholder="Number of plants" type="number" step="1" min="1" required>
-            </label>
-            <label class="input_label">Month planted (from seed, unless otherwise specified):
-                <input autocomplete="off" name="remove_plants_from_garden_month_planted" placeholder="Month planted (from seed, unless otherwise specified; lowercase)" type="text" pattern="[a-z\s]{1,}" required>
-            </label>
-            <label class="input_label">How many months planted for:
-                <input autocomplete="off" name="remove_plants_from_garden_months_to_remain_planted" placeholder="How many months planted for (must match)" type="number" step="1" min="1" required>
-            </label>
-            <button type="submit" name="remove_plants_from_garden_button" value="yes">Remove Plant</button>
-        </form>
 
 {% endblock %}

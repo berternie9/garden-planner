@@ -70,7 +70,6 @@ def index():
         username = cur.fetchall()[0]["username"]
         
         if request.method == "POST":
-            # Add freetext plants or gardens (including require plants) to SQL database, per user input from form in index.html
             if request.form.get("add_freetext_plant_button"):
                 if not request.form.get("plant_name_add"):
                     return error("Must provide plant name.", 400)
@@ -81,8 +80,8 @@ def index():
                 elif not request.form.get("perennial_or_annual_add"):
                     return error("Must specify perennial or annual.", 400)
     
-                if not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_add")) or not request.form.get("plant_name_add").islower():
-                    return error("Plant name must be lowercase and alphabetical.", 400)
+                if not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_add")):
+                    return error("Plant name must be alphabetical.", 400)
     
                 try:
                     duration_to_maturity_months_add = int(request.form.get("duration_to_maturity_months_add"))
@@ -157,7 +156,7 @@ def index():
                 if request.form.get("december_add") == "yes":
                     december_add = "yes"
     
-                cur.execute("INSERT INTO freetext_plants (user_id, plant_name, duration_to_maturity_months, plant_spacing_metres, metres_squared_required, perennial_or_annual, january, february, march, april, may, june, july, august, september, october, november, december) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (int(session["user_id"]), request.form.get("plant_name_add"), duration_to_maturity_months_add, plant_spacing_metres_add, metres_squared_required_add, request.form.get("perennial_or_annual_add"), january_add, february_add, march_add, april_add, may_add, june_add, july_add, august_add, september_add, october_add, november_add, december_add,))          
+                cur.execute("INSERT INTO freetext_plants (user_id, plant_name, duration_to_maturity_months, plant_spacing_metres, metres_squared_required, perennial_or_annual, january, february, march, april, may, june, july, august, september, october, november, december) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (int(session["user_id"]), request.form.get("plant_name_add").lower(), duration_to_maturity_months_add, plant_spacing_metres_add, metres_squared_required_add, request.form.get("perennial_or_annual_add"), january_add, february_add, march_add, april_add, may_add, june_add, july_add, august_add, september_add, october_add, november_add, december_add,))          
                 db.commit()
               
                 return redirect("/")
@@ -165,8 +164,8 @@ def index():
             if request.form.get("remove_freetext_plant_button"):
                 if not request.form.get("plant_name_remove"):
                     return error("Must provide plant name.", 400)
-                if not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_remove")) or not request.form.get("plant_name_remove").islower():
-                    return error("Plant name must be lowercase and alphabetical.", 400)
+                if not all(x.isalpha() or x.isspace() for x in request.form.get("plant_name_remove")):
+                    return error("Plant name must be alphabetical.", 400)
   
                 cur.execute("SELECT freetext_plants.plant_name FROM freetext_plants WHERE freetext_plants.user_id = %s", (int(session["user_id"]),))
                 freetext_plant_names_from_user = cur.fetchall()
@@ -174,13 +173,13 @@ def index():
                 is_plant_in_db = False
     
                 for i in range(len(freetext_plant_names_from_user)):
-                    if freetext_plant_names_from_user[i]["plant_name"] == request.form.get("plant_name_remove"):
+                    if freetext_plant_names_from_user[i]["plant_name"] == request.form.get("plant_name_remove").lower():
                         is_plant_in_db = True
     
                 if is_plant_in_db == False:
                     return error("Plant name not found.", 400)
     
-                cur.execute("SELECT plant_id FROM freetext_plants WHERE plant_name = %s AND user_id = %s", (request.form.get("plant_name_remove"), int(session["user_id"]),))
+                cur.execute("SELECT plant_id FROM freetext_plants WHERE plant_name = %s AND user_id = %s", (request.form.get("plant_name_remove").lower(), int(session["user_id"]),))
                 plant_id = cur.fetchall() 
   
                 for i in range(len(plant_id)):
@@ -199,8 +198,8 @@ def index():
                 elif not request.form.get("add_new_garden_size"):
                     return error("Must provide garden size (metres squared).", 400)
     
-                if not all(x.isalpha() or x.isspace() for x in request.form.get("add_new_garden_name")) or not request.form.get("add_new_garden_name").islower():
-                        return error("Garden name must be lowercase and alphabetical.", 400)
+                if not all(x.isalpha() or x.isspace() for x in request.form.get("add_new_garden_name")):
+                        return error("Garden name must be alphabetical.", 400)
     
                 try:
                     add_new_garden_size = int(request.form.get("add_new_garden_size"))
@@ -214,10 +213,10 @@ def index():
                 garden_names_user = cur.fetchall()
               
                 for i in range(len(garden_names_user)):
-                    if garden_names_user[i]["garden_name"] == request.form.get("add_new_garden_name"):
+                    if garden_names_user[i]["garden_name"] == request.form.get("add_new_garden_name").lower():
                         return error("You already have a garden with that name.", 400)
   
-                cur.execute("INSERT INTO gardens (garden_name, garden_size_metres_squared, user_id) VALUES (%s, %s, %s)", (request.form.get("add_new_garden_name"), request.form.get("add_new_garden_size"), int(session["user_id"]),))
+                cur.execute("INSERT INTO gardens (garden_name, garden_size_metres_squared, user_id) VALUES (%s, %s, %s)", (request.form.get("add_new_garden_name").lower(), request.form.get("add_new_garden_size"), int(session["user_id"]),))
                 db.commit()
               
                 return redirect("/")
@@ -225,8 +224,8 @@ def index():
             if request.form.get("remove_garden_button"):
                 if not request.form.get("remove_garden_name"):
                     return error("Must provide garden name.", 400)
-                if not all(x.isalpha() or x.isspace() for x in request.form.get("remove_garden_name")) or not request.form.get("remove_garden_name").islower():
-                    return error("Garden name must be lowercase and alphabetical.", 400)
+                if not all(x.isalpha() or x.isspace() for x in request.form.get("remove_garden_name")):
+                    return error("Garden name must be alphabetical.", 400)
     
                 cur.execute("SELECT garden_name FROM gardens WHERE user_id = %s", (int(session["user_id"]),))
                 garden_names = cur.fetchall()
@@ -234,13 +233,13 @@ def index():
                 is_plant_in_db = False
     
                 for i in range(len(garden_names)):
-                    if garden_names[i]["garden_name"] == request.form.get("remove_garden_name"):
+                    if garden_names[i]["garden_name"] == request.form.get("remove_garden_name").lower():
                         is_plant_in_db = True
     
                 if is_plant_in_db == False:
                     return error("You don't have a garden with that name.", 400)
     
-                cur.execute("SELECT garden_id FROM gardens WHERE garden_name = %s AND user_id = %s", (request.form.get("remove_garden_name"), int(session["user_id"]),))
+                cur.execute("SELECT garden_id FROM gardens WHERE garden_name = %s AND user_id = %s", (request.form.get("remove_garden_name").lower(), int(session["user_id"]),))
                 garden_id = cur.fetchall()
   
                 for i in range(len(garden_id)):
@@ -265,12 +264,12 @@ def index():
                 if not request.form.get("add_plants_to_garden_freetext"):
                     return error("Must indicate whether plant is freetext.", 400)
     
-                if not all(x.isalpha() or x.isspace() for x in request.form.get("add_plants_to_garden_garden_name")) or not request.form.get("add_plants_to_garden_garden_name").islower():
-                    return error("Garden name must be lowercase and alphabetical.", 400)
-                if not all(x.isalpha() or x.isspace() for x in request.form.get("add_plants_to_garden_plant_name")) or not request.form.get("add_plants_to_garden_plant_name").islower():
-                    return error("Plant name must be lowercase and alphabetical.", 400)
-                if not all(x.isalpha() or x.isspace() for x in request.form.get("add_plants_to_garden_month_planted")) or not request.form.get("add_plants_to_garden_month_planted").islower():
-                    return error("Month planted must be lowercase and alphabetical.", 400)
+                if not all(x.isalpha() or x.isspace() for x in request.form.get("add_plants_to_garden_garden_name")):
+                    return error("Garden name must be alphabetical.", 400)
+                if not all(x.isalpha() or x.isspace() for x in request.form.get("add_plants_to_garden_plant_name")):
+                    return error("Plant name must be alphabetical.", 400)
+                if not all(x.isalpha() or x.isspace() for x in request.form.get("add_plants_to_garden_month_planted")):
+                    return error("Month planted must be alphabetical.", 400)
     
                 try:
                     add_plants_to_garden_number_of_plants = int(request.form.get("add_plants_to_garden_number_of_plants"))
@@ -292,7 +291,7 @@ def index():
                     return error("Is the plant freetext? Must select either yes or no.", 400)
                 
                 garden_id = None
-                cur.execute("SELECT garden_id FROM gardens WHERE user_id = %s AND garden_name = %s", (int(session["user_id"]), request.form.get("add_plants_to_garden_garden_name"),))
+                cur.execute("SELECT garden_id FROM gardens WHERE user_id = %s AND garden_name = %s", (int(session["user_id"]), request.form.get("add_plants_to_garden_garden_name").lower(),))
                 garden_id = cur.fetchone()["garden_id"]
   
                 if garden_id == None:
@@ -300,10 +299,10 @@ def index():
     
                 plant_id = None
                 if request.form.get("add_plants_to_garden_freetext") == 'no':
-                    cur.execute("SELECT plant_id FROM plants WHERE plant_name = %s", (request.form.get("add_plants_to_garden_plant_name"),))
+                    cur.execute("SELECT plant_id FROM plants WHERE plant_name = %s", (request.form.get("add_plants_to_garden_plant_name").lower(),))
                     plant_id = cur.fetchone()["plant_id"]
                 elif request.form.get("add_plants_to_garden_freetext") == 'yes':
-                    cur.execute("SELECT plant_id FROM freetext_plants WHERE plant_name = %s", (request.form.get("add_plants_to_garden_plant_name"),))
+                    cur.execute("SELECT plant_id FROM freetext_plants WHERE plant_name = %s", (request.form.get("add_plants_to_garden_plant_name").lower(),))
                     plant_id = cur.fetchone()["plant_id"]
                 if plant_id == None:
                     return error("Plant not found.", 400)
@@ -328,40 +327,18 @@ def index():
                     return error("Must provide garden name.", 400)
                 if not request.form.get("remove_plants_from_garden_plant_name"):
                     return error("Must provide plant name.", 400)
-                if not request.form.get("remove_plants_from_garden_number_of_plants"):
-                    return error("Must provide number of plants to remove.", 400)
-                if not request.form.get("remove_plants_from_garden_month_planted"):
-                    return error("Must provide month planted.", 400)
-                if not request.form.get("remove_plants_from_garden_months_to_remain_planted"):
-                    return error("Must provide number of months this plant was planted for.", 400)
                 if not request.form.get("remove_plants_from_garden_freetext"):
                     return error("Is the plant freetext? Must select either yes or no.", 400)
-                if not all(x.isalpha() or x.isspace() for x in request.form.get("remove_plants_from_garden_garden_name")) or not request.form.get("remove_plants_from_garden_garden_name").islower():
-                    return error("Garden name must be lowercase and alphabetical.", 400)
-                if not all(x.isalpha() or x.isspace() for x in request.form.get("remove_plants_from_garden_plant_name")) or not request.form.get("remove_plants_from_garden_plant_name").islower():
-                    return error("Plant name must be lowercase and alphabetical.", 400)
-                if not all(x.isalpha() or x.isspace() for x in request.form.get("remove_plants_from_garden_month_planted")) or not request.form.get("remove_plants_from_garden_month_planted").islower():
-                    return error("Month planted must be lowercase and alphabetical.", 400)
-    
+                
+                if not all(x.isalpha() or x.isspace() for x in request.form.get("remove_plants_from_garden_garden_name")):
+                    return error("Garden name must be alphabetical.", 400)
+                if not all(x.isalpha() or x.isspace() for x in request.form.get("remove_plants_from_garden_plant_name")):
+                    return error("Plant name must be alphabetical.", 400)
+              
                 if request.form.get("remove_plants_from_garden_freetext") != "yes" and request.form.get("remove_plants_from_garden_freetext") != "no":
                     return error("Is the plant freetext? Must select either yes or no.", 400)
-                try:
-                    remove_plants_from_garden_number_of_plants = int(request.form.get("remove_plants_from_garden_number_of_plants"))
-                except ValueError:
-                    return error("Number of plants to remove from garden must be integer.", 400)
-    
-                if remove_plants_from_garden_number_of_plants <= 0:
-                    return error("Number of plants to remove from garden must be positive number.", 400)
-    
-                try:
-                    remove_plants_from_garden_months_to_remain_planted = int(request.form.get("remove_plants_from_garden_months_to_remain_planted"))
-                except ValueError:
-                    return error("Number of months this plant was planted for must be integer.", 400)
-    
-                if remove_plants_from_garden_months_to_remain_planted <= 0:
-                    return error("Number of months this plant was planted for must be positive number.", 400)
-    
-                cur.execute("SELECT garden_id FROM gardens WHERE user_id = %s AND garden_name = %s", (int(session["user_id"]), request.form.get("remove_plants_from_garden_garden_name")),)
+                
+                cur.execute("SELECT garden_id FROM gardens WHERE user_id = %s AND garden_name = %s", (int(session["user_id"]), request.form.get("remove_plants_from_garden_garden_name").lower(),))
                 garden_ids = cur.fetchall()
   
                 if len(garden_ids) == 0:
@@ -370,48 +347,17 @@ def index():
     
                 plant_id = None
                 if request.form.get("remove_plants_from_garden_freetext") == 'no':
-                    cur.execute("SELECT plant_id FROM plants WHERE plant_name = %s", (request.form.get("remove_plants_from_garden_plant_name"),),)  
+                    cur.execute("SELECT plant_id FROM plants WHERE plant_name = %s", (request.form.get("remove_plants_from_garden_plant_name").lower(),))  
                     plant_id = cur.fetchone()["plant_id"]
                 elif request.form.get("remove_plants_from_garden_freetext") == 'yes':
-                    cur.execute("SELECT plant_id FROM freetext_plants WHERE plant_name = %s", (request.form.get("remove_plants_from_garden_plant_name"),),)
+                    cur.execute("SELECT plant_id FROM freetext_plants WHERE plant_name = %s", (request.form.get("remove_plants_from_garden_plant_name").lower(),))
                     result = cur.fetchone()
                     plant_id = result["plant_id"]
    
                 if plant_id == None:
                     return error("Plant not found.", 400)
     
-                cur.execute("SELECT month_planted FROM planted_in_gardens WHERE garden_id = %s AND plant_id = %s", (garden_id, plant_id),)
-                months_planted = cur.fetchall()
-
-                planted_that_month = False
-                for i in range(len(months_planted)):
-                    if request.form.get("remove_plants_from_garden_month_planted") == months_planted[i]["month_planted"]:
-                        planted_that_month = True
-    
-                if not (planted_that_month):
-                    return error("None of that plant was planted that month.", 400)
-    
-                cur.execute("SELECT number_of_plants FROM planted_in_gardens WHERE garden_id = %s AND plant_id = %s AND month_planted = %s", (garden_id, plant_id, request.form.get("remove_plants_from_garden_month_planted")),)
-                number_of_plants = cur.fetchall()
-
-                correct_number_of_plants_that_month = False
-                for i in range(len(number_of_plants)):
-                    if int(request.form.get("remove_plants_from_garden_number_of_plants")) == number_of_plants[i]["number_of_plants"]:
-                        correct_number_of_plants_that_month = True
-                    if not (correct_number_of_plants_that_month):
-                        return error("Must match number of plants planted that month.", 400)
-    
-                cur.execute("SELECT months_to_remain_planted FROM planted_in_gardens WHERE garden_id = %s AND plant_id = %s AND month_planted = %s AND number_of_plants = %s", (garden_id, plant_id, request.form.get("remove_plants_from_garden_month_planted"), int(request.form.get("remove_plants_from_garden_number_of_plants"))),)
-                months_to_remain_planted = cur.fetchall()
-                
-                correct_months_to_remain_planted = False
-                for i in range(len(months_to_remain_planted)):
-                    if int(request.form.get("remove_plants_from_garden_months_to_remain_planted")) == months_to_remain_planted[i]["months_to_remain_planted"]:
-                        correct_months_to_remain_planted = True
-                if not (correct_months_to_remain_planted):
-                    return error("The requested plant (that was planted that month) was not to remain planted for that many months.", 400)
-    
-                cur.execute("DELETE FROM planted_in_gardens WHERE garden_id = %s AND plant_id = %s AND month_planted = %s AND number_of_plants = %s AND months_to_remain_planted = %s", (garden_id, plant_id, request.form.get("remove_plants_from_garden_month_planted"), request.form.get("remove_plants_from_garden_number_of_plants"), request.form.get("remove_plants_from_garden_months_to_remain_planted"),),)
+                cur.execute("DELETE FROM planted_in_gardens WHERE garden_id = %s AND plant_id = %s", (garden_id, plant_id,))
                 db.commit()        
                 return redirect("/")
               

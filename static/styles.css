@@ -26,7 +26,8 @@ button[type="submit"], button[type="search"], button[type="button"]
     border: 2px solid #ffffff;
     border-radius: 4px;
     color: #ffffff;
-    background-color: #61baaf;
+    background-color: transparent;
+    background-image: linear-gradient(rgba(76, 175, 164, 0.3), rgba(76, 175, 164, 0.3));
     cursor: pointer;
 }
 
@@ -72,6 +73,8 @@ h1, h2, h3, h4, h5, h6
     color: #e06ca6;
     margin: 5px;
     margin-left: 10px;
+    background-image: radial-gradient(rgba(255,255,255,.5) 30%, rgba(255,255,255,0) 90%);
+    width: fit-content;
 }
 
 h1
@@ -151,24 +154,25 @@ table
     font-style: normal;
 }
 
-.login-form, .register-form {
+.login-form, .register-form, .change-password-form {
     padding: 0;
     margin: 3rem auto;
     width: fit-content;
 }
 
-.login-form button, .register-form button {
+.login-form button, .register-form button, .change-password-form button {
     margin: 1rem auto;
-    background-color: #e06ca6;
+    background-color: transparent;
+    background-image: linear-gradient(rgba(224,108,166,0.5), rgba(224,108,166,0.5));
 }
 
-.login-form .input_label input, .register-form .input_label input {
+.login-form .input_label input, .register-form .input_label input, .change-password-form .input_label input {
     border-color: #e06ca6;
     color: #5fb1f5;
     font-weight: bold;
 }
 
-.login-form .input_label, .register-form .input_label {
+.login-form .input_label, .register-form .input_label, .change-password-form .input_label {
     color: #d28bae;
     font-weight: bold;
 }
@@ -189,7 +193,9 @@ table
     display: block;
     color: #5fb1f5;
     text-align: center;
-    margin: 1rem;
+    margin: 1rem auto;
+    background-image: radial-gradient(rgba(255,255,255,.5) 30%, rgba(255,255,255,0) 90%);
+    width: fit-content;
 }
 
 .navbar_ul
@@ -280,6 +286,10 @@ ul:has(.navbar_li_right) {
 
 
 @media (max-width: 600px) {
+
+    body {
+        font-size: 0.8rem;
+    }
     
     h1 {
         font-size: 1.5rem;
@@ -296,6 +306,7 @@ ul:has(.navbar_li_right) {
     input[type="text"], input[type="number"], input[type="password"]
     {
         display: block;
+        font-size: 0.7rem;
     }
 
     .navbar_header {
@@ -307,9 +318,9 @@ ul:has(.navbar_li_right) {
     }
     
     .title {
-        font-size: 3rem;
-        width: 10rem;
-        margin: 0 auto;
+        font-size: 4rem;
+        width: 15rem;
+        margin: 2rem auto;
     }
 
     .garden_size {
