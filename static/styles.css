@@ -127,6 +127,14 @@ table
     font-size: 150%;
 }
 
+.error_input { 
+    border: 2px solid red; 
+}
+
+.error-message { 
+    color: red; 
+}
+
 .garden_size
 {
     font-size: 100%;

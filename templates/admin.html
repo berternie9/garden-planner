@@ -6,7 +6,7 @@
 
 {% block main %}
     <h1>Add Plant</h1>
-    <form action="/admin" method="post">
+    <form action="/admin" method="post" target="_blank">
         <label class="input_label">Plant name (lowercase):
             <input autocomplete="off" name="plant_name_add" placeholder="Plant name (lowercase)" type="text" pattern="[a-z\s]{1,}" required>
         </label>
@@ -73,7 +73,7 @@
     <br>
 
     <h1>Remove Plant</h1>
-    <form action="/admin" method="post">
+    <form action="/admin" method="post" target="_blank">
         <label class="input_label">Plant name (lowercase):
             <input autocomplete="off" name="plant_name_remove" placeholder="Plant name (lowercase)" type="text" pattern="[a-z\s]{1,}" required>
         </label>
@@ -82,7 +82,7 @@
     <br>
 
     <h1>Update Plant</h1>
-    <form action="/admin" method="post">
+    <form action="/admin" method="post" target="_blank">
         <label class="input_label">Plant name (lowercase):
             <input autocomplete="off" name="plant_name_update" placeholder="Plant name (lowercase)" type="text" pattern="[a-z\s]{1,}" required>
         </label>
@@ -152,7 +152,7 @@
     <br>
 
     <h1>Add Companion Friends</h1>
-    <form action="/admin" method="post">
+    <form action="/admin" method="post" target="_blank">
         <label class="input_label">Plant A name (lowercase):
             <input autocomplete="off" name="plant_name_add_friend_a" placeholder="Plant A name (lowercase)" type="text" pattern="[a-z\s]{1,}" required>
         </label>
@@ -164,7 +164,7 @@
     <br>
 
     <h1>Remove Companion Friends</h1>
-    <form action="/admin" method="post">
+    <form action="/admin" method="post" target="_blank">
         <label class="input_label">Plant A name (lowercase):
             <input autocomplete="off" name="plant_name_remove_friend_a" placeholder="Plant A name (lowercase)" type="text" pattern="[a-z]{1,\s}" required>
         </label>
@@ -176,7 +176,7 @@
     <br>
 
     <h1>Add Companion Enemies</h1>
-    <form action="/admin" method="post">
+    <form action="/admin" method="post" target="_blank">
         <label class="input_label">Plant A name (lowercase):
             <input autocomplete="off" name="plant_name_add_enemy_a" placeholder="Plant A name (lowercase)" type="text" pattern="[a-z]\s]" required>
         </label>
@@ -188,7 +188,7 @@
     <br>
 
     <h1>Remove Companion Enemies</h1>
-    <form action="/admin" method="post">
+    <form action="/admin" method="post" target="_blank">
         <label class="input_label">Plant A name (lowercase):
             <input autocomplete="off" name="plant_name_remove_enemy_a" placeholder="Plant A name (lowercase)" type="text" pattern="[a-z]{1,\s}" required>
         </label>

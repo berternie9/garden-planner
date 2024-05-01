@@ -8,7 +8,7 @@ import pytz
 import requests
 import urllib
 
-from flask import Flask, flash, jsonify, redirect, render_template, request, session
+from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from functools import wraps
@@ -43,8 +43,19 @@ def after_request(response):
     return response
 
 def error(message, code):
-    final_message = "Error " + str(code) + ": " +  message
-    return render_template("error.html", final_message=final_message, code=code)
+    with db.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+        cur.execute("SELECT * FROM users WHERE username = %s", ('admin',))
+        admin = cur.fetchall()
+        admin_id = None
+
+        if len(admin) == 1:
+            admin_id = admin[0]["user_id"]
+        
+        cur.execute("SELECT * FROM users WHERE user_id = %s", (session["user_id"],))
+        username = cur.fetchall()[0]["username"]
+
+        final_message = "Error " + str(code) + ": " +  message
+        return render_template("error.html", final_message=final_message, code=code, admin_id=admin_id, username=username)
 
 def login_required(f):
     @wraps(f)
@@ -155,7 +166,14 @@ def index():
                     november_add = "yes"
                 if request.form.get("december_add") == "yes":
                     december_add = "yes"
-    
+
+                cur.execute("SELECT plant_id FROM freetext_plants WHERE plant_name = %s", (request.form.get("plant_name_add").lower(),))
+                try:
+                    plant_id = cur.fetchone()["plant_id"]
+                    return error("Freetext plant already exists.", 400)
+                except (TypeError):
+                    pass
+                    
                 cur.execute("INSERT INTO freetext_plants (user_id, plant_name, duration_to_maturity_months, plant_spacing_metres, metres_squared_required, perennial_or_annual, january, february, march, april, may, june, july, august, september, october, november, december) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (int(session["user_id"]), request.form.get("plant_name_add").lower(), duration_to_maturity_months_add, plant_spacing_metres_add, metres_squared_required_add, request.form.get("perennial_or_annual_add"), january_add, february_add, march_add, april_add, may_add, june_add, july_add, august_add, september_add, october_add, november_add, december_add,))          
                 db.commit()
               
@@ -292,18 +310,27 @@ def index():
                 
                 garden_id = None
                 cur.execute("SELECT garden_id FROM gardens WHERE user_id = %s AND garden_name = %s", (int(session["user_id"]), request.form.get("add_plants_to_garden_garden_name").lower(),))
-                garden_id = cur.fetchone()["garden_id"]
-  
+                try:
+                    garden_id = cur.fetchone()["garden_id"]
+                except (TypeError):
+                    return error("Garden name not found.", 400)
+                
                 if garden_id == None:
                     return error("Garden name not found.", 400)
     
                 plant_id = None
                 if request.form.get("add_plants_to_garden_freetext") == 'no':
                     cur.execute("SELECT plant_id FROM plants WHERE plant_name = %s", (request.form.get("add_plants_to_garden_plant_name").lower(),))
-                    plant_id = cur.fetchone()["plant_id"]
+                    try:
+                        plant_id = cur.fetchone()["plant_id"]
+                    except (TypeError):
+                        return error("Plant not found.", 400)
                 elif request.form.get("add_plants_to_garden_freetext") == 'yes':
                     cur.execute("SELECT plant_id FROM freetext_plants WHERE plant_name = %s", (request.form.get("add_plants_to_garden_plant_name").lower(),))
-                    plant_id = cur.fetchone()["plant_id"]
+                    try:
+                        plant_id = cur.fetchone()["plant_id"]
+                    except (TypeError):
+                        return error("Plant not found.", 400)
                 if plant_id == None:
                     return error("Plant not found.", 400)
     
@@ -348,7 +375,10 @@ def index():
                 plant_id = None
                 if request.form.get("remove_plants_from_garden_freetext") == 'no':
                     cur.execute("SELECT plant_id FROM plants WHERE plant_name = %s", (request.form.get("remove_plants_from_garden_plant_name").lower(),))  
-                    plant_id = cur.fetchone()["plant_id"]
+                    try:
+                        plant_id = cur.fetchone()["plant_id"]
+                    except (TypeError):
+                        return error("Plant not found.", 400)
                 elif request.form.get("remove_plants_from_garden_freetext") == 'yes':
                     cur.execute("SELECT plant_id FROM freetext_plants WHERE plant_name = %s", (request.form.get("remove_plants_from_garden_plant_name").lower(),))
                     result = cur.fetchone()
