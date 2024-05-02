@@ -414,7 +414,7 @@ def index():
                 total_different_plants_in_garden.append([])
                 all_plant_names_in_garden.append([])
                 space_remaining_each_month.append([])
-    
+
             if number_of_gardens_from_user > 0:
                 for i in range(number_of_gardens_from_user):
                     plants_planted_each_month_of_year = []
@@ -444,7 +444,7 @@ def index():
                                 months_to_actually_remain_planted = min(plant_months_to_remain_planted, 12 - j) 
                                 for l in range(months_to_actually_remain_planted):
                                     plants_growing_each_month_of_year[j + l].append(plants_planted_each_month_of_year[j][k])
-    
+                    
                     for j in range(12):
                         planted_gardens_from_user[i].append(plants_growing_each_month_of_year[j])
     
