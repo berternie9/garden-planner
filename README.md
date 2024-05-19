@@ -36,7 +36,8 @@ The schema is as follows:
 - PostgreSQL 
 - HTML
 - CSS
-- JavaScript
+- JavaScriptß
+- Render
 
 ## Data sources:
 - Plant information: https://localfoodconnect.org.au/community-gardening/planting-guide/
