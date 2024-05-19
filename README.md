@@ -1,18 +1,22 @@
 # Garden Planner
+Garden Planner was my Final Project for CS50. It is a web app, built with a Python/Flask/PostgreSQL stack, that allows users plan their yearly gardens. 
 
-## Video demonstration
+### Getting started
+Garden Planner was originally deployed on Render ([here](https://garden-planner-2spe.onrender.com/)), and is not currently live.  
+
+But you can check out my video demonstration on YouTube below! 
+
+#### Video demonstration
 [![Garden Planner screencast](https://img.youtube.com/vi/4ROhMB_EX68/0.jpg)](https://www.youtube.com/watch?v=4ROhMB_EX68)
 
 ## Description:
-This project was my Final Project for CS50. It is a web application that helps users plan their yearly gardens. 
-
 Users are able to add virtual gardens to their page, and plan which plants they will have in their gardens throughout the year.
 
-The web application also contains a database of commonly grown plants, including optimal months to sow their seeds, duration to maturity, space required, and more. The gardening information is specific to north-east Melbourne (Australia) - a temperate zone - and the metric system is used.
+Garden Planner also contains a database of commonly grown plants, including optimal months to sow their seeds, duration to maturity, space required, and more. The gardening information is specific to north-east Melbourne (Australia) - a temperate zone - and the metric system is used.
 
 There is also functionality to add or remove freetext plants, check which plants play well with each other (and conversely which plants do not like each other), and to check the weather for the upcoming week for a user-specified location.
 
-### Schema
+## Schema
 This is the main SQL database, which was originally SQLite (and converted to PostgreSQLn for deployment on Render). It contains information on all users, plants, freetext plants, gardens, companion friends, and companion enemies.
 
 The schema is as follows:
