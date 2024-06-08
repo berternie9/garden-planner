@@ -17,7 +17,7 @@ Garden Planner also contains a database of commonly grown plants, including opti
 There is also functionality to add or remove freetext plants, check which plants play well with each other (and conversely which plants do not like each other), and to check the weather for the upcoming week for a user-specified location.
 
 ## Schema
-This is the main SQL database, which was originally SQLite (and converted to PostgreSQLn for deployment on Render). It contains information on all users, plants, freetext plants, gardens, companion friends, and companion enemies.
+This is the main SQL database, which was originally SQLite (and converted to PostgreSQL for deployment on Render). It contains information on all users, plants, freetext plants, gardens, companion friends, and companion enemies.
 
 The schema is as follows:
 - CREATE TABLE users (user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, username TEXT NOT NULL, hash_password TEXT NOT NULL);
