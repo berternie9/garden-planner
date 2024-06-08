@@ -36,7 +36,7 @@ The schema is as follows:
 - PostgreSQL 
 - HTML
 - CSS
-- JavaScriptß
+- JavaScript
 - Render
 
 ## Data sources:
